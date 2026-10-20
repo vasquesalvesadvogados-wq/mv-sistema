@@ -1,0 +1,19 @@
+{
+  "name": "mv-motor",
+  "version": "1.0.0",
+  "description": "mv-sistema — Motor WhatsApp (ponte Baileys ↔ Supabase)",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": "22.x"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.131.0",
+    "@whiskeysockets/baileys": "7.0.0-rc14",
+    "ffmpeg-static": "^5.2.0",
+    "pino": "^8.21.0",
+    "qrcode": "^1.5.4"
+  }
+}

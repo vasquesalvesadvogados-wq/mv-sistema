@@ -1,0 +1,490 @@
+/* ============================================================================
+   CAMADA DE TOKENS
+   Paleta neutra do escritório: seis cores-base (grafite 900 e 700, aço 400 e 200,
+   off-white e âmbar). As rampas interpolam a partir delas e os tokens semânticos
+   apontam para as rampas. A estrutura (primitivos → rampas → semânticos) vem do
+   design system de origem; as cores, não.
+
+   Este arquivo é a única fonte de verdade visual do sistema. Nenhum outro CSS
+   deve declarar hex, sombra ou raio literal — sempre var(--token).
+
+   Ordem de import (index.html): tokens.css → styles.css → chat.css
+   ============================================================================ */
+
+/* ---------------------------------------------------------------------------
+   FONTES — todas self-hosted em fonts/. Nada de CDN: o sistema abre offline e
+   não conta ao Google quem está usando o CRM do escritório.
+   DM Sans é variável (um arquivo cobre 100–1000). DM Mono é estática, então
+   cada peso é um arquivo. Só 400 e 500 são usados na interface.
+   --------------------------------------------------------------------------- */
+@font-face{
+  font-family:"DM Sans";
+  src:url("../fonts/dmsans-latin.woff2") format("woff2");
+  font-weight:100 1000;font-style:normal;font-display:swap;
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face{
+  font-family:"DM Sans";
+  src:url("../fonts/dmsans-latin-ext.woff2") format("woff2");
+  font-weight:100 1000;font-style:normal;font-display:swap;
+  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face{
+  font-family:"DM Mono";
+  src:url("../fonts/dmmono-400-latin.woff2") format("woff2");
+  font-weight:400;font-style:normal;font-display:swap;
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face{
+  font-family:"DM Mono";
+  src:url("../fonts/dmmono-400-latin-ext.woff2") format("woff2");
+  font-weight:400;font-style:normal;font-display:swap;
+  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face{
+  font-family:"DM Mono";
+  src:url("../fonts/dmmono-500-latin.woff2") format("woff2");
+  font-weight:500;font-style:normal;font-display:swap;
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face{
+  font-family:"DM Mono";
+  src:url("../fonts/dmmono-500-latin-ext.woff2") format("woff2");
+  font-weight:500;font-style:normal;font-display:swap;
+  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+
+:root{
+  /* ---------- Paleta (seis cores-base, valores RGB) ----------
+     Neutra e sóbria: grafite é o cromo e a tinta, aço é o frio de apoio (links, foco,
+     séries), off-white é o papel e âmbar é o único acento quente. */
+  --marca-grafite-900:#1C1F24;   /* tinta, barra lateral, botão primário */
+  --marca-grafite-700:#2E333B;   /* hover do primário, série 1 */
+  --marca-aco-400:#5C7F9E;       /* série 2, borda de foco, cor padrão de dado (COR_PADRAO_DADO) */
+  --marca-aco-200:#C5D0DA;       /* fundo de avatar de grupo, série 4 */
+  --marca-offwhite:#F4F3EF;      /* fundo de página, texto inverso */
+  --marca-ambar:#D9A441;         /* o único acento quente: botão de destaque, série 3, avisos */
+
+  /* ---------- Rampa grafite (chumbo; matiz fria mínima, sem azul) ---------- */
+  --grafite-950:#131518;
+  --grafite-900:var(--marca-grafite-900);
+  --grafite-800:#252930;
+  --grafite-700:var(--marca-grafite-700);
+  --grafite-600:#434851;
+  --grafite-500:#595F69;
+
+  /* ---------- Rampa aço (azul acinzentado, dessaturado) ---------- */
+  --aco-600:#3F5D78;   /* link: 6,89:1 sobre branco, 6,20:1 sobre bone-100 */
+  --aco-500:#4E6E8B;   /* anel de foco e hover do link: 5,35:1 sobre branco */
+  --aco-400:var(--marca-aco-400);
+  --aco-300:#91A8BD;
+  --aco-200:var(--marca-aco-200);
+  --aco-100:#DCE3EA;
+  --aco-50:#EDF1F5;
+
+  /* ---------- Rampa âmbar (racionada: só destaque comercial e aviso) ---------- */
+  --ambar-700:#704F1A;   /* âmbar que carrega texto: 7,44:1 sobre branco, 6,58:1 sobre ambar-100 */
+  --ambar-600:#976D26;
+  --ambar-500:#C08B2D;
+  --ambar-400:var(--marca-ambar);
+  --ambar-300:#E5BF76;
+  --ambar-200:#F1D8A7;
+  --ambar-100:#FAF0DC;
+
+  /* ---------- Neutros quentes (papel) + tintas cinza ---------- */
+  --bone-050:#FAFAF7;
+  --bone-100:var(--marca-offwhite);
+  --bone-200:#ECEBE6;
+  --bone-300:#E1DFD8;
+  --bone-400:#CDCBC3;
+  --ink-900:var(--grafite-900);
+  --ink-700:#3B3A38;   /* corpo: 10,2:1 sobre bone-100 */
+  --ink-500:#605F5C;   /* muted: 6,4:1 sobre branco */
+  --ink-400:#83827E;
+  --ink-300:#A8A7A4;
+  --white:#FFFFFF;
+
+  /* ---------- Estado (cores de sistema, não de marca) ---------- */
+  --success-800:#1F4D37;   /* verde escuro: status "em atendimento" (8,2:1 sobre success-100) */
+  --success-600:#2F6B4F;
+  --success-500:#38775A;   /* verde médio: status "resolvido" (4,5:1 sobre success-100) */
+  --success-400:#4C9673;
+  --success-300:#7DBA9C;   /* modo noturno: "em atendimento" (7,1:1 sobre night-800) */
+  --success-200:#9CCFB4;   /* modo noturno: "resolvido" (9,1:1 sobre night-800) */
+  --success-100:#E2F0E9;
+  --warning-500:#9E5418;   /* laranja que carrega texto: status "aguardando" (5,0:1 sobre warning-100) */
+  --warning-600:#8A5325;   /* era #A9682F no DS (3,89:1, abaixo do AA); 5,55:1 sobre warning-100 */
+  --warning-400:var(--ambar-400);
+  --warning-100:var(--ambar-100);
+  --danger-600:#9B3B32;
+  --danger-400:#C2564B;
+  --danger-300:#E08A80;    /* texto de erro sobre fundo escuro (6,3:1 sobre night-800) */
+  --danger-100:#F6E4E1;
+  --info-600:var(--aco-600);
+  --info-400:var(--aco-400);
+  --info-100:var(--aco-50);
+  /* bordas dos avisos suaves (o DS as usa literais nos Alerts) */
+  --success-border:#BFDCCE;
+  --success-border-strong:#AECFBE;
+  --success-100-hover:#D5E8DE;
+  --danger-border:#E7BEB9;
+  --danger-border-strong:#DFAFA9;
+  --danger-100-hover:#F1D6D2;
+
+  /* ---------- Tipografia ---------- */
+  --font-sans:"DM Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-mono:"DM Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --font-serif:"Merriweather",Georgia,serif;
+
+  --fw-regular:400;
+  --fw-medium:500;
+  --fw-bold:700;
+
+  --text-2xs:11px;
+  --text-xs:12px;
+  --text-sm:13px;
+  --text-base:14px;
+  --text-md:15px;
+  --text-lg:17px;
+  --text-xl:20px;
+  --text-2xl:24px;
+  --text-3xl:30px;
+  --text-4xl:38px;
+
+  --lh-tight:1.15;
+  --lh-snug:1.3;
+  --lh-normal:1.45;
+  --lh-relaxed:1.6;
+
+  --ls-tight:-0.02em;
+  --ls-snug:-0.01em;
+  --ls-normal:0;
+  --ls-wide:0.04em;
+  --ls-eyebrow:0.14em;   /* rótulos mono em caixa alta */
+
+  /* ---------- Espaçamento (grade de 4px) ---------- */
+  --space-05:2px;
+  --space-1:4px;
+  --space-2:8px;
+  --space-3:12px;
+  --space-4:16px;
+  --space-5:20px;
+  --space-6:24px;
+  --space-7:32px;
+  --space-8:40px;
+  --space-9:48px;
+  --space-10:64px;
+
+  --sidebar-w:248px;
+  --sidebar-w-collapsed:64px;
+  --topbar-h:56px;
+  --page-gutter:32px;
+  --content-max:1240px;
+
+  /* ---------- Raios ---------- */
+  --radius-xs:4px;
+  --radius-sm:6px;
+  --radius-md:10px;
+  --radius-lg:14px;
+  --radius-xl:20px;
+  --radius-pill:999px;
+  --radius-card:var(--radius-lg);
+  --radius-control:var(--radius-md);
+  --radius-field:var(--radius-md);
+
+  /* ---------- Elevação (sombras tingidas de grafite, nunca pretas) ---------- */
+  --shadow-none:none;
+  --shadow-xs:0 1px 2px rgba(28,31,36,.06);
+  --shadow-sm:0 1px 3px rgba(28,31,36,.07), 0 1px 2px rgba(28,31,36,.04);
+  --shadow-md:0 4px 12px rgba(28,31,36,.07), 0 1px 3px rgba(28,31,36,.05);
+  --shadow-lg:0 12px 32px rgba(28,31,36,.10), 0 2px 8px rgba(28,31,36,.05);
+  --shadow-xl:0 28px 64px rgba(28,31,36,.16), 0 4px 12px rgba(28,31,36,.06);
+  /* Anel de foco: 2px de respiro branco + 2px sólidos. O do DS de origem (tom frio
+     a 35%) dava 1,41–1,67:1 em todo fundo e reprovava o 3:1 de indicador de foco
+     (WCAG 1.4.11). Aço-500 sólido passa em todos: 5,35 branco, 4,48 bone-200,
+     3,09 grafite-900, 4,36 danger-100. O respiro branco separa o anel do
+     preenchimento do próprio elemento (botão grafite, trilho do interruptor). */
+  --ring-focus:0 0 0 2px var(--white), 0 0 0 4px var(--aco-500);
+  --ring-danger:0 0 0 2px var(--white), 0 0 0 4px var(--danger-600);   /* era danger-400 a 28%: 1,45:1 */
+  --ring-inverse:0 0 0 3px rgba(244,243,239,.45);   /* foco sobre grafite (off-white a 45%) */
+  --scrim:rgba(28,31,36,.45);
+  --scrim-midia:rgba(28,31,36,.92);        /* visualizador de foto/vídeo do Chat: quase opaco */
+  --shadow-lateral:1px 0 4px rgba(28,31,36,.10);  /* coluna fixa projetando para a direita */
+  --blur-overlay:blur(8px) saturate(120%);
+
+  /* ---------- Movimento ---------- */
+  --dur-instant:80ms;
+  --dur-fast:140ms;
+  --dur-base:200ms;
+  --dur-slow:320ms;
+  --ease-standard:cubic-bezier(.2,.6,.2,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  /* atrasos do rail do Chat (chat.css): espera antes de abrir, rótulo depois da largura, recolher e fechar */
+  --delay-abrir:160ms;
+  --delay-rotulo:260ms;
+  --delay-recolher:120ms;
+  --delay-fechar:60ms;
+  /* laço do indicador de carregamento (UI.spinner): não é transição, não repousa.
+     Uma volta a cada 1200ms, velocidade constante para o brilho andar por igual.
+     Só para animação infinita, nunca para transição de estado. */
+  --dur-ciclo:1200ms;
+  --ease-ciclo:linear;
+  --transition-control:background var(--dur-fast) var(--ease-standard),color var(--dur-fast) var(--ease-standard),border-color var(--dur-fast) var(--ease-standard),box-shadow var(--dur-fast) var(--ease-standard);
+
+  /* ---------- Noite (só o modo noturno usa; DESIGN.md §11) ----------
+     Grafite escurecido, sem azul; night-950 fica abaixo de grafite-950. Medidas sobre
+     night-800: bone-300 (corpo) 13,2:1 · ink-300 (muted) 7,3:1 · ink-400 (subtle) 4,6:1. */
+  --night-950:#0B0C0E;
+  --night-900:#111315;
+  --night-800:#17191C;
+  --night-700:#1F2226;
+  --night-600:#2A2D32;
+  --night-500:#3B3F45;
+
+  /* ---------- Semântica: superfícies ---------- */
+  --surface-app:var(--bone-100);
+  --surface-card:var(--white);
+  --surface-sunken:var(--bone-200);
+  --surface-muted:var(--bone-050);
+  --surface-inverse:var(--grafite-900);
+  --surface-nav:var(--grafite-900);
+  --surface-nav-hover:rgba(255,255,255,.06);
+  --surface-nav-active:rgba(255,255,255,.12);
+  --surface-translucida:rgba(255,255,255,.5);   /* opção de enquete sobre a bolha do Chat */
+  --surface-accent-soft:var(--aco-50);
+  --surface-accent-warm:var(--ambar-100);   /* fundo âmbar suave: chip de destaque, menção na nota */
+  --surface-raised:var(--white);          /* menus, popovers, sugestões */
+  --surface-chat:var(--bone-200);         /* fundo da conversa do Chat */
+  --surface-bubble-in:var(--white);       /* bolha recebida */
+  --surface-bubble-out:var(--aco-100);    /* bolha enviada */
+  --surface-avatar:var(--bone-400);
+  --surface-avatar-grupo:var(--aco-200);
+  --surface-badge:var(--grafite-900);     /* contador de não lidas */
+
+  /* ---------- Tela de entrada (exceção documentada, DESIGN.md §7) ---------- */
+  --abertura-veu:rgba(19,21,24,.82);    /* grafite-950 a 82%: garante 6,08:1 no pior caso (seda em aço-400) */
+  --abertura-veu-fim:rgba(19,21,24,0);
+  /* as três cores da seda (WebGL); js/ui-abertura.js as lê daqui e, se alguma não for hex, fica sem seda */
+  --abertura-seda-1:var(--grafite-950);
+  --abertura-seda-2:var(--grafite-600);
+  --abertura-seda-3:var(--aco-400);
+
+  /* ---------- Semântica: texto ---------- */
+  --text-heading:var(--ink-900);
+  --text-body:var(--ink-700);
+  --text-muted:var(--ink-500);
+  --text-subtle:var(--ink-400);
+  --text-on-inverse:var(--bone-200);
+  --text-on-inverse-muted:rgba(244,243,239,.62);
+  --text-on-inverse-subtle:rgba(244,243,239,.42);   /* rótulos de seção da sidebar */
+  --text-link:var(--aco-600);
+  --text-link-hover:var(--aco-500);
+  --text-accent:var(--ambar-700);
+  --text-on-badge:var(--white);
+  --text-on-brand:#FFF;                  /* texto sobre cor fixa de marca/dado (tag, departamento, enviar) */
+  /* a barra lateral é escura nos dois temas: estes não invertem (ao contrário de --text-on-inverse) */
+  --text-on-nav:var(--bone-200);
+  --text-on-nav-muted:rgba(244,243,239,.62);
+  --text-on-nav-subtle:rgba(244,243,239,.42);
+
+  /* ---------- Semântica: bordas ---------- */
+  --border-subtle:var(--bone-300);
+  --border-default:var(--bone-400);
+  --border-focus:var(--aco-400);
+  --border-inverse:rgba(255,255,255,.12);
+
+  /* ---------- Caixa de seleção (checkbox) ---------- */
+  /* Borda da caixa vazia. O DS usa --border-default (bone-400), que dá 1,59:1
+     sobre branco e 1,37:1 sobre bone-200 (fundo da conversa do Chat) — abaixo do
+     3:1 que a WCAG 1.4.11 exige do contorno de um controle, sem o qual a caixa vazia
+     não se identifica. ink-400 dá 3,85 (branco) · 3,68 (bone-050) · 3,46 (bone-100)
+     · 3,22 (bone-200) · 3,39 (aco-50). Divergência deliberada do DS, no mesmo
+     espírito do --warning-600 (DESIGN.md §4). */
+  --check-borda:var(--ink-400);
+  /* Trilho do interruptor desligado: mesma conta do checkbox — bone-400 dava 1,59:1
+     sobre branco e o controle não se via; ink-400 passa do 3:1 de componente. */
+  --control-track-off:var(--ink-400);
+  /* Confirmação de leitura (duplo check) no Chat: o tom frio sobre a bolha enviada
+     ficava perto de 3:1 (aco-400 sobre aco-100: 3,25:1) e o "lida" quase não se
+     via; success-600 dá 4,9:1. */
+  --tick-lida:var(--success-600);
+  /* Campo de texto (input, textarea, select) — hoje branco; ganha valor próprio no
+     modo noturno, por isso não se usa --surface-card nele. */
+  --surface-field:var(--white);
+
+  /* Glifos da caixa, aplicados como MÁSCARA: a cor vem de background-color (token)
+     e o SVG não carrega cor nenhuma — por isso não há hex dentro do data-URI.
+     Paths oficiais do lucide-static 0.544.0 (ISC), "check" e "minus", os mesmos de
+     js/icones.js. Mesma técnica de ícone por máscara do design system de origem. */
+  --check-marca:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+  --check-marca-parcial:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3C/svg%3E");
+
+  /* ---------- Semântica: ações ---------- */
+  --btn-primary-bg:var(--grafite-900);
+  --btn-primary-bg-hover:var(--grafite-700);
+  --btn-primary-bg-active:var(--grafite-950);
+  --btn-primary-fg:var(--bone-200);
+  --btn-secondary-bg:var(--white);
+  --btn-secondary-bg-hover:var(--bone-100);
+  --btn-secondary-fg:var(--ink-900);
+  --btn-accent-bg:var(--ambar-400);
+  --btn-accent-bg-hover:var(--ambar-500);
+  --btn-accent-fg:var(--grafite-900);
+  --btn-ghost-fg:var(--ink-700);
+  --btn-ghost-bg-hover:var(--bone-200);
+  --btn-danger-bg:var(--danger-600);
+  --btn-danger-fg:#FFF;
+  --disabled-opacity:.45;
+
+  /* ---------- Semântica: estado (chips, avisos, deltas) ---------- */
+  --state-success-bg:var(--success-100);  --state-success-fg:var(--success-600);  --state-success-border:var(--success-border);
+  --state-warning-bg:var(--warning-100);  --state-warning-fg:var(--warning-600);  --state-warning-border:var(--ambar-300);
+  --state-danger-bg:var(--danger-100);    --state-danger-fg:var(--danger-600);    --state-danger-border:var(--danger-border);
+  --state-info-bg:var(--info-100);        --state-info-fg:var(--info-600);        --state-info-border:var(--aco-200);
+  /* amarelo suave: recesso / férias coletivas / ponto facultativo no calendário */
+  --state-note-bg:#FBF3D6;   --state-note-fg:#7A5A12;   --state-note-border:#EAD99A;
+  /* status do atendimento (Chat), no visual do ChatGuru escolhido pelo dono (05/10/2026):
+     -fill = pílula PASTEL com letra branca (salmão, lilás-azul, areia, verde claro, cinza claro).
+     Exceção registrada ao §4 do DESIGN.md: o contraste com branco fica entre 1,8:1 e 2,8:1 —
+     decisão do dono, para ficar igual ao sistema anterior do time.
+     -bg/-fg = célula tingida + número colorido na tabela do dashboard (esses passam no AA). */
+  --status-aberto-fill:#F07B7B;      --status-aberto-fg:var(--danger-600);      --status-aberto-bg:var(--danger-100);
+  --status-atendimento-fill:#7CCB94; --status-atendimento-fg:var(--success-600); --status-atendimento-bg:var(--success-100);   /* "verdinho" (dono, 05/10) */
+  --status-aguardando-fill:#E3C25C;  --status-aguardando-fg:var(--warning-500); --status-aguardando-bg:var(--warning-100);
+  --status-resolvido-fill:#4FA06E;   --status-resolvido-fg:var(--success-500);  --status-resolvido-bg:var(--success-100);     /* verde mais fechado que o "em atendimento" */
+  --status-fechado-fill:#A9B2BC;     --status-fechado-fg:var(--ink-500);        --status-fechado-bg:var(--bone-200);
+
+  /* presença do time (Configurações → Equipe): bolinha online/offline */
+  --presence-on:var(--success-400);  --presence-off:var(--ink-300);  --presence-ring:rgba(76,150,115,.25);
+
+  /* ---------- Série de dados (README §4 · Data visualisation) ---------- */
+  --chart-1:var(--grafite-700);
+  --chart-2:var(--aco-400);
+  --chart-3:var(--ambar-400);
+  --chart-4:var(--aco-200);
+  --chart-5:var(--success-400);
+  --chart-grid:var(--bone-300);
+
+  /* ======================================================================
+     PONTE COM OS NOMES LEGADOS (v1–v6)
+     O sistema foi escrito com --bg/--card/--text/--primary etc. Em vez de
+     reescrever 15 mil linhas, os nomes antigos passam a apontar para os
+     tokens do DS. Código novo deve usar os tokens semânticos acima.
+     ====================================================================== */
+  --bg:var(--surface-app);
+  --bg-soft:var(--surface-muted);
+  --card:var(--surface-card);
+  --card-2:var(--surface-app);
+  --border:var(--border-subtle);
+  --border-2:var(--border-default);
+  --text:var(--text-body);
+  --text-dim:var(--text-muted);
+  /* Todos os 9 usos de --text-faint no sistema são texto de leitura (refs,
+     objetivos, dicas, projeções), não metadado decorativo. Em ink-400 davam
+     3,6:1 sobre branco — abaixo do AA. Sobem para ink-500 (5,7:1).
+     --text-subtle segue disponível direto, para placeholder e afins. */
+  --text-faint:var(--text-muted);
+  --primary:var(--grafite-900);
+  --primary-2:var(--grafite-700);
+  --grad:var(--chart-1);              /* gradientes não existem mais no sistema */
+  --green:var(--success-600);
+  --amber:var(--warning-600);
+  --red:var(--danger-600);
+  --cyan:var(--info-600);
+  --purple:var(--aco-600);
+  --radius:var(--radius-card);
+  --shadow:var(--shadow-lg);
+}
+
+/* ======================================================================
+   MODO NOTURNO (DESIGN.md §11) — redefine SÓ tokens semânticos.
+   Rampas de marca e de estado não mudam; cores que são dado (tag, departamento,
+   status) também não. A tela de entrada tem tokens próprios.
+   ====================================================================== */
+:root[data-tema="escuro"]{
+  color-scheme:dark;
+  --surface-app:var(--night-900);
+  --surface-card:var(--night-800);
+  --surface-sunken:var(--night-700);
+  --surface-muted:var(--night-700);
+  --surface-inverse:var(--bone-200);
+  --surface-nav:var(--night-950);
+  --surface-translucida:rgba(255,255,255,.08);
+  --surface-accent-soft:rgba(92,127,158,.18);    /* aço-400 a 18% */
+  --surface-accent-warm:rgba(217,164,65,.16);    /* âmbar-400 a 16% */
+  --surface-raised:var(--night-700);
+  --surface-chat:var(--night-950);
+  --surface-bubble-in:var(--night-800);
+  --surface-bubble-out:var(--grafite-700);
+  --surface-avatar:var(--night-500);
+  --surface-avatar-grupo:var(--aco-600);
+  --surface-badge:var(--bone-200);
+
+  --text-heading:var(--bone-100);
+  --text-body:var(--bone-300);
+  --text-muted:var(--ink-300);
+  --text-subtle:var(--ink-400);
+  --text-on-inverse:var(--grafite-900);
+  --text-on-inverse-muted:rgba(28,31,36,.7);
+  --text-on-inverse-subtle:rgba(28,31,36,.5);
+  --text-link:var(--aco-300);
+  --text-link-hover:var(--aco-200);
+  --text-accent:var(--ambar-300);
+  --text-on-badge:var(--grafite-900);
+
+  --border-subtle:var(--night-600);
+  --border-default:var(--night-500);
+  --border-focus:var(--aco-300);
+  --check-borda:var(--ink-300);
+  --control-track-off:var(--ink-300);
+  --tick-lida:var(--success-400);
+  --surface-field:var(--night-700);
+
+  --btn-primary-bg:var(--bone-200);
+  --btn-primary-bg-hover:var(--bone-300);
+  --btn-primary-bg-active:var(--bone-400);
+  --btn-primary-fg:var(--grafite-900);
+  --btn-secondary-bg:var(--night-800);
+  --btn-secondary-bg-hover:var(--night-700);
+  --btn-secondary-fg:var(--bone-100);
+  --btn-ghost-fg:var(--bone-300);
+  --btn-ghost-bg-hover:var(--night-700);
+
+  --state-success-bg:rgba(76,150,115,.18);  --state-success-fg:var(--success-400);  --state-success-border:rgba(76,150,115,.4);
+  --state-warning-bg:rgba(217,164,65,.16);  --state-warning-fg:var(--ambar-300);    --state-warning-border:rgba(217,164,65,.4);
+  --state-danger-bg:rgba(194,86,75,.18);    --state-danger-fg:var(--danger-300);    --state-danger-border:rgba(224,138,128,.4);
+  --state-info-bg:rgba(92,127,158,.18);     --state-info-fg:var(--aco-300);         --state-info-border:rgba(145,168,189,.4);
+  --state-note-bg:rgba(230,201,106,.18); --state-note-fg:#E6C96A; --state-note-border:rgba(230,201,106,.45);
+  /* as pílulas (-fill) são iguais nos dois temas; só a célula/número da tabela muda */
+  --status-aberto-fg:var(--danger-300);       --status-aberto-bg:rgba(194,86,75,.22);
+  --status-atendimento-fg:var(--success-300); --status-atendimento-bg:rgba(76,150,115,.22);
+  --status-aguardando-fg:var(--ambar-400);    --status-aguardando-bg:rgba(217,164,65,.2);
+  --status-resolvido-fg:var(--success-200);   --status-resolvido-bg:rgba(76,150,115,.16);
+  --status-fechado-fg:var(--ink-300);         --status-fechado-bg:rgba(168,167,164,.14);
+  --presence-on:var(--success-300);  --presence-off:var(--ink-500);  --presence-ring:rgba(125,186,156,.25);
+
+  /* no escuro a sombra de grafite some: elevação preta discreta, e a borda carrega o resto */
+  --shadow-xs:0 1px 2px rgba(0,0,0,.35);
+  --shadow-sm:0 1px 3px rgba(0,0,0,.4), 0 1px 2px rgba(0,0,0,.3);
+  --shadow-md:0 4px 12px rgba(0,0,0,.45), 0 1px 3px rgba(0,0,0,.3);
+  --shadow-lg:0 12px 32px rgba(0,0,0,.55), 0 2px 8px rgba(0,0,0,.35);
+  --shadow-xl:0 28px 64px rgba(0,0,0,.65), 0 4px 12px rgba(0,0,0,.4);
+  --shadow-lateral:1px 0 4px rgba(0,0,0,.4);
+  --ring-focus:0 0 0 2px var(--night-900), 0 0 0 4px var(--aco-300);
+  --ring-danger:0 0 0 2px var(--night-900), 0 0 0 4px var(--danger-300);
+  --scrim:rgba(0,0,0,.6);
+  --chart-1:var(--aco-300);
+  --chart-grid:var(--night-600);
+}
+
+@media (prefers-reduced-motion:reduce){
+  :root{--dur-instant:0ms;--dur-fast:0ms;--dur-base:0ms;--dur-slow:0ms;--dur-ciclo:0ms;--delay-abrir:0ms;--delay-rotulo:0ms;--delay-recolher:0ms;--delay-fechar:0ms}
+}
+
+/* ---------- Utilitários de texto do DS ---------- */
+.sis-eyebrow{
+  font-family:var(--font-mono);font-size:var(--text-2xs);letter-spacing:var(--ls-eyebrow);
+  text-transform:uppercase;color:var(--text-muted);
+}
+.sis-num,.num{font-family:var(--font-mono);font-variant-numeric:tabular-nums;letter-spacing:var(--ls-snug)}
+.sis-quote{font-family:var(--font-serif);font-style:italic;font-weight:300;color:var(--text-heading)}

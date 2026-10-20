@@ -1,0 +1,9 @@
+.DS_Store
+node_modules/
+.vercel/
+.env
+.env.*
+*.log
+.superpowers/
+nuvem/INTERNO-*
+MV-CHAVES.md
