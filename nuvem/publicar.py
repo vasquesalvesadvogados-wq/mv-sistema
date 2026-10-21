@@ -14,7 +14,7 @@ import urllib.request
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJETO = 'mv-sistema'
-TEAM_ID = ''   # id do time do escritório na Vercel (team_…), preenchido na ativação
+TEAM_ID = 'team_Cn3hyRNyzIiTDvONqVN0dQZ0'   # time do escritório na Vercel
 IGNORAR_DIRS = {'nuvem', 'motor', 'testes', '.claude', '.superpowers', '.git', '__pycache__', 'node_modules'}
 IGNORAR_ARQS = {'LEIA-ME.md', 'DESIGN.md', 'CLAUDE.md', '.vercelignore', '.DS_Store'}
 

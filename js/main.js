@@ -1,7 +1,7 @@
 /* ============ MAIN — inicialização ============ */
 
 /* versão publicada — precisa bater com versao.json e com o ?v= do index.html */
-const APP_VERSAO = '1.0.8';
+const APP_VERSAO = '1.0.9';
 
 /* ---------- rede de segurança: nenhum erro some em silêncio ----------
    Antes, uma exceção num pulso ou numa ação deixava a tela parada sem aviso.

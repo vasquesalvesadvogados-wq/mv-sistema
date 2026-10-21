@@ -3,46 +3,47 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://nuccqhhvcpdaqyvznbhb.supabase.co" crossorigin>
 <title></title>
 <!-- identidade do escritório: síncrono e antes de tudo (escreve o título; o script do tema abaixo lê a chave daqui) -->
-<script src="js/escritorio.js?v=1.0.8"></script>
+<script src="js/escritorio.js?v=1.0.9"></script>
 <meta name="color-scheme" content="light dark">
 <!-- modo noturno: aplica a preferência salva ANTES das folhas de estilo, senão a página pisca clara -->
 <script>(function(){try{var p=localStorage.getItem(ESCRITORIO.chaves.tema)||'claro';var t=p==='auto'?(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'escuro':'claro'):(p==='escuro'?'escuro':'claro');document.documentElement.setAttribute('data-tema',t);}catch(e){}})();</script>
 <link rel="preload" href="fonts/dmsans-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/dmmono-400-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/tokens.css?v=1.0.8">
-<link rel="stylesheet" href="css/styles.css?v=1.0.8">
-<link rel="stylesheet" href="css/chat.css?v=1.0.8">
+<link rel="stylesheet" href="css/tokens.css?v=1.0.9">
+<link rel="stylesheet" href="css/styles.css?v=1.0.9">
+<link rel="stylesheet" href="css/chat.css?v=1.0.9">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="%231C1F24"/><text x="32" y="41" text-anchor="middle" font-family="monospace" font-size="26" fill="%23F4F3EF">MV</text></svg>'>
-<script src="js/icones.js?v=1.0.8" defer></script>
-<script src="js/store.js?v=1.0.8" defer></script>
-<script src="js/analysis.js?v=1.0.8" defer></script>
-<script src="js/cadence.js?v=1.0.8" defer></script>
-<script src="js/csv.js?v=1.0.8" defer></script>
-<script src="js/ai.js?v=1.0.8" defer></script>
-<script src="js/cloud-config.js?v=1.0.8" defer></script>
-<script src="js/ui-core.js?v=1.0.8" defer></script>
-<script src="js/ui-copiar.js?v=1.0.8" defer></script>
-<script src="js/ui-spinner.js?v=1.0.8" defer></script>
-<script src="js/ui-kbd.js?v=1.0.8" defer></script>
-<script src="js/ui-senha.js?v=1.0.8" defer></script>
-<script src="js/ui-tema.js?v=1.0.8" defer></script>
-<script src="js/ui-grafico.js?v=1.0.8" defer></script>
-<script src="js/views-dashboard.js?v=1.0.8" defer></script>
-<script src="js/views-inicio.js?v=1.0.8" defer></script>
-<script src="js/views-leads.js?v=1.0.8" defer></script>
-<script src="js/views-analysis.js?v=1.0.8" defer></script>
-<script src="js/views-contratos.js?v=1.0.8" defer></script>
-<script src="js/views-agenda.js?v=1.0.8" defer></script>
-<script src="js/emojis.js?v=1.0.8" defer></script>
-<script src="js/texto-wa.js?v=1.0.8" defer></script>
-<script src="js/views-chat.js?v=1.0.8" defer></script>
-<script src="js/views-usuarios.js?v=1.0.8" defer></script>
-<script src="js/views-extra.js?v=1.0.8" defer></script>
-<script src="js/cloud.js?v=1.0.8" defer></script>
-<script src="js/ui-abertura.js?v=1.0.8" defer></script>
-<script src="js/main.js?v=1.0.8" defer></script>
+<script src="js/icones.js?v=1.0.9" defer></script>
+<script src="js/store.js?v=1.0.9" defer></script>
+<script src="js/analysis.js?v=1.0.9" defer></script>
+<script src="js/cadence.js?v=1.0.9" defer></script>
+<script src="js/csv.js?v=1.0.9" defer></script>
+<script src="js/ai.js?v=1.0.9" defer></script>
+<script src="js/cloud-config.js?v=1.0.9" defer></script>
+<script src="js/ui-core.js?v=1.0.9" defer></script>
+<script src="js/ui-copiar.js?v=1.0.9" defer></script>
+<script src="js/ui-spinner.js?v=1.0.9" defer></script>
+<script src="js/ui-kbd.js?v=1.0.9" defer></script>
+<script src="js/ui-senha.js?v=1.0.9" defer></script>
+<script src="js/ui-tema.js?v=1.0.9" defer></script>
+<script src="js/ui-grafico.js?v=1.0.9" defer></script>
+<script src="js/views-dashboard.js?v=1.0.9" defer></script>
+<script src="js/views-inicio.js?v=1.0.9" defer></script>
+<script src="js/views-leads.js?v=1.0.9" defer></script>
+<script src="js/views-analysis.js?v=1.0.9" defer></script>
+<script src="js/views-contratos.js?v=1.0.9" defer></script>
+<script src="js/views-agenda.js?v=1.0.9" defer></script>
+<script src="js/emojis.js?v=1.0.9" defer></script>
+<script src="js/texto-wa.js?v=1.0.9" defer></script>
+<script src="js/views-chat.js?v=1.0.9" defer></script>
+<script src="js/views-usuarios.js?v=1.0.9" defer></script>
+<script src="js/views-extra.js?v=1.0.9" defer></script>
+<script src="js/cloud.js?v=1.0.9" defer></script>
+<script src="js/ui-abertura.js?v=1.0.9" defer></script>
+<script src="js/main.js?v=1.0.9" defer></script>
 </head>
 <body>
 <div class="app">
