@@ -2,7 +2,7 @@
    ABERTURA — tela de entrada do sistema (v6.8)
 
    Duas etapas dentro do #auth-gate:
-     1. "abertura" — seda em grafite (WebGL) + a marca se montando + "Entrar no sistema"
+     1. "abertura" — seda em marinho (WebGL) + a marca se montando + "Entrar no sistema"
      2. "form"     — o mesmo fundo, a marca sobe e o cartão de login entra
 
    Este arquivo NÃO mexe na autenticação. O cloud.js continua dono do gate
@@ -12,7 +12,7 @@
      · apareceu erro ou a tela de nova senha → pula direto para o formulário
 
    Exceção documentada ao Design System (DESIGN.md §7): esta é a ÚNICA
-   superfície do sistema com gradiente. Só aqui, só em grafite e aço.
+   superfície do sistema com gradiente. Só aqui, só em marinho e sálvia.
    ============================================================
 
    O shader abaixo é um porte do componente "Animated Gradient" do Spell UI
@@ -44,8 +44,8 @@
 const Abertura = (function () {
   'use strict';
 
-  /* As cores da seda saem dos tokens --abertura-seda-1..3 (css/tokens.css: grafite-950,
-     grafite-600, aço-400), lidas em iniciarGL(); aqui não há cor nenhuma.
+  /* As cores da seda saem dos tokens --abertura-seda-1..3 (css/tokens.css: marinho-950,
+     marinho-600, salvia-500), lidas em iniciarGL(); aqui não há cor nenhuma.
      Os parâmetros são os que foram aprovados no protótipo C. */
   const SEDA = {
     rotation: -50, proportion: .30, scale: .10, speed: 18, distortion: .04,

@@ -85,8 +85,8 @@ body.modo-chat .view{padding:0!important;max-width:none!important;height:100vh;o
   transition:opacity var(--dur-fast) var(--ease-standard);
 }
 .wa-rail-logo:hover{opacity:.85}
-.wa-rail-logo svg{width:24px;height:24px;flex-shrink:0}
-.wa .wa-rail-logo svg text{fill:currentColor}
+/* o símbolo VA em sálvia sobre o bloco inverso (marinho no claro, papel no escuro: token próprio) */
+.wa-rail-logo svg{width:24px;height:24px;flex-shrink:0;color:var(--marca-logo-inverso)}
 .wa-rail-div{border-top:1px solid var(--border-subtle);margin:5px 4px}
 .wa-rail-btn{
   height:42px;border-radius:var(--radius-md);border:none;background:transparent;cursor:pointer;
@@ -381,7 +381,7 @@ pre.wa-mono{display:block;white-space:pre-wrap;padding:6px 8px;margin:2px 0}
 .wa-erro{color:var(--state-danger-fg);font-weight:600}
 .wa-img{max-width:330px;max-height:340px;border-radius:var(--radius-sm);display:block;cursor:pointer}
 .wa-figurinha{width:150px;height:150px;object-fit:contain;display:block}
-.wa-video{max-width:330px;max-height:340px;border-radius:var(--radius-sm);display:block;background:var(--grafite-950)}
+.wa-video{max-width:330px;max-height:340px;border-radius:var(--radius-sm);display:block;background:var(--marinho-950)}
 .wa-audio{display:flex;align-items:center;gap:8px;min-width:260px;padding:4px 4px 0}
 .wa-audio audio{height:36px;flex:1;max-width:280px}
 .wa-transcricao{

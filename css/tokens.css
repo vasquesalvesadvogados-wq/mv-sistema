@@ -1,9 +1,10 @@
 /* ============================================================================
    CAMADA DE TOKENS
-   Paleta neutra do escritório: seis cores-base (grafite 900 e 700, aço 400 e 200,
-   off-white e âmbar). As rampas interpolam a partir delas e os tokens semânticos
-   apontam para as rampas. A estrutura (primitivos → rampas → semânticos) vem do
-   design system de origem; as cores, não.
+   Identidade Vasques Alves: seis cores-base (marinho 900 e 700, sálvia 500 e 200,
+   papel e cinza; marinho, sálvia e cinza vêm do manual da marca). As rampas
+   interpolam a partir delas (OKLCH, mesma matiz, luminância monotônica) e os tokens
+   semânticos apontam para as rampas. A estrutura (primitivos → rampas → semânticos)
+   vem do design system de origem; as cores, não.
 
    Este arquivo é a única fonte de verdade visual do sistema. Nenhum outro CSS
    deve declarar hex, sombra ou raio literal — sempre var(--token).
@@ -56,52 +57,51 @@
 
 :root{
   /* ---------- Paleta (seis cores-base, valores RGB) ----------
-     Neutra e sóbria: grafite é o cromo e a tinta, aço é o frio de apoio (links, foco,
-     séries), off-white é o papel e âmbar é o único acento quente. */
-  --marca-grafite-900:#1C1F24;   /* tinta, barra lateral, botão primário */
-  --marca-grafite-700:#2E333B;   /* hover do primário, série 1 */
-  --marca-aco-400:#5C7F9E;       /* série 2, borda de foco, cor padrão de dado (COR_PADRAO_DADO) */
-  --marca-aco-200:#C5D0DA;       /* fundo de avatar de grupo, série 4 */
-  --marca-offwhite:#F4F3EF;      /* fundo de página, texto inverso */
-  --marca-ambar:#D9A441;         /* o único acento quente: botão de destaque, série 3, avisos */
+     Marinho é o cromo e a tinta; sálvia é o símbolo da marca e o acento racionado;
+     papel é o fundo e cinza (o de apoio do manual) é borda e superfície afundada.
+     Contrastes medidos com a fórmula WCAG 2.x do teste (testes/testes-front.js). */
+  --marca-marinho-900:#041650;   /* manual da marca: barra lateral, login, botão primário, títulos (16,99:1 sobre branco) */
+  --marca-marinho-700:#1E3C86;   /* derivado: hover do primário, links (10,26:1 sobre branco) */
+  --marca-salvia-500:#758C7F;    /* manual da marca: símbolo do logo, gráficos, COR_PADRAO_DADO (3,61:1 sobre branco, 4,70:1 sobre marinho-900; não carrega texto) */
+  --marca-salvia-200:#C4D2CA;    /* derivado: fundos suaves, série 4 */
+  --marca-papel:#F3F4F2;         /* derivado do cinza da marca: fundo de página, texto inverso */
+  --marca-cinza:#D2D3D1;         /* manual da marca: bordas e superfície afundada */
 
-  /* ---------- Rampa grafite (chumbo; matiz fria mínima, sem azul) ---------- */
-  --grafite-950:#131518;
-  --grafite-900:var(--marca-grafite-900);
-  --grafite-800:#252930;
-  --grafite-700:var(--marca-grafite-700);
-  --grafite-600:#434851;
-  --grafite-500:#595F69;
+  /* ---------- Rampa marinho (OKLCH, matiz 264,5; interação e informação) ---------- */
+  --marinho-950:#010A35;   /* mais escuro que a marca: pressionado, seda da abertura */
+  --marinho-900:var(--marca-marinho-900);
+  --marinho-800:#0E286B;
+  --marinho-700:var(--marca-marinho-700);
+  --marinho-600:#345295;   /* 7,54:1 sobre branco */
+  --marinho-500:#4F6AA5;   /* anel de foco e hover do link: 5,33 branco · 4,34 bone-200 · 3,19 marinho-900 */
+  --marinho-400:#6E86B7;
+  --marinho-300:#8FA2C8;   /* série 3; no escuro, link (7,14:1 sobre night-800) */
+  --marinho-200:#B7C4DF;
+  --marinho-100:#DAE1F0;
+  --marinho-50:#EDF1FA;
 
-  /* ---------- Rampa aço (azul acinzentado, dessaturado) ---------- */
-  --aco-600:#3F5D78;   /* link: 6,89:1 sobre branco, 6,20:1 sobre bone-100 */
-  --aco-500:#4E6E8B;   /* anel de foco e hover do link: 5,35:1 sobre branco */
-  --aco-400:var(--marca-aco-400);
-  --aco-300:#91A8BD;
-  --aco-200:var(--marca-aco-200);
-  --aco-100:#DCE3EA;
-  --aco-50:#EDF1F5;
+  /* ---------- Rampa sálvia (OKLCH, matiz 160,5; marca e acento racionado) ---------- */
+  --salvia-800:#293A31;   /* só o modo noturno: bolha enviada (bone-300 sobre ela: 8,92:1) */
+  --salvia-700:#3F5248;   /* sálvia que carrega texto: 8,36:1 sobre branco, 6,50:1 sobre salvia-100 */
+  --salvia-600:#556B5E;   /* botão verde e contador: 5,75:1 com texto branco */
+  --salvia-500:var(--marca-salvia-500);
+  --salvia-400:#8CA195;
+  --salvia-300:#A7BAAF;   /* sobre o marinho: 8,32:1 (contador da barra lateral) */
+  --salvia-200:var(--marca-salvia-200);
+  --salvia-100:#DCE5E0;
+  --salvia-50:#EDF3EF;
 
-  /* ---------- Rampa âmbar (racionada: só destaque comercial e aviso) ---------- */
-  --ambar-700:#704F1A;   /* âmbar que carrega texto: 7,44:1 sobre branco, 6,58:1 sobre ambar-100 */
-  --ambar-600:#976D26;
-  --ambar-500:#C08B2D;
-  --ambar-400:var(--marca-ambar);
-  --ambar-300:#E5BF76;
-  --ambar-200:#F1D8A7;
-  --ambar-100:#FAF0DC;
-
-  /* ---------- Neutros quentes (papel) + tintas cinza ---------- */
-  --bone-050:#FAFAF7;
-  --bone-100:var(--marca-offwhite);
-  --bone-200:#ECEBE6;
-  --bone-300:#E1DFD8;
-  --bone-400:#CDCBC3;
-  --ink-900:var(--grafite-900);
-  --ink-700:#3B3A38;   /* corpo: 10,2:1 sobre bone-100 */
-  --ink-500:#605F5C;   /* muted: 6,4:1 sobre branco */
-  --ink-400:#83827E;
-  --ink-300:#A8A7A4;
+  /* ---------- Neutros (papel e cinza da marca, sem tom quente) + tintas azuladas ---------- */
+  --bone-050:#F8F9F8;
+  --bone-100:var(--marca-papel);
+  --bone-200:#E7E8E6;
+  --bone-300:#DDDEDC;
+  --bone-400:var(--marca-cinza);
+  --ink-900:var(--marinho-900);
+  --ink-700:#38404F;   /* corpo: 9,45:1 sobre bone-100 */
+  --ink-500:#5E6572;   /* muted: 5,87:1 sobre branco, 4,77:1 sobre bone-200 */
+  --ink-400:#7F8590;
+  --ink-300:#A9AEB7;
   --white:#FFFFFF;
 
   /* ---------- Estado (cores de sistema, não de marca) ---------- */
@@ -112,17 +112,19 @@
   --success-300:#7DBA9C;   /* modo noturno: "em atendimento" (7,1:1 sobre night-800) */
   --success-200:#9CCFB4;   /* modo noturno: "resolvido" (9,1:1 sobre night-800) */
   --success-100:#E2F0E9;
+  /* aviso é estado, não marca: valores próprios (o âmbar saiu da paleta) */
   --warning-500:#9E5418;   /* laranja que carrega texto: status "aguardando" (5,0:1 sobre warning-100) */
   --warning-600:#8A5325;   /* era #A9682F no DS (3,89:1, abaixo do AA); 5,55:1 sobre warning-100 */
-  --warning-400:var(--ambar-400);
-  --warning-100:var(--ambar-100);
+  --warning-400:#D9A441;   /* preenchimento de aviso: borda, barra, ponto */
+  --warning-300:#E5BF76;   /* borda do aviso suave; no escuro, texto de aviso (10,52:1 sobre night-800) */
+  --warning-100:#FAF0DC;
   --danger-600:#9B3B32;
   --danger-400:#C2564B;
   --danger-300:#E08A80;    /* texto de erro sobre fundo escuro (6,3:1 sobre night-800) */
   --danger-100:#F6E4E1;
-  --info-600:var(--aco-600);
-  --info-400:var(--aco-400);
-  --info-100:var(--aco-50);
+  --info-600:var(--marinho-700);
+  --info-400:var(--marinho-500);
+  --info-100:var(--marinho-50);
   /* bordas dos avisos suaves (o DS as usa literais nos Alerts) */
   --success-border:#BFDCCE;
   --success-border-strong:#AECFBE;
@@ -192,24 +194,24 @@
   --radius-control:var(--radius-md);
   --radius-field:var(--radius-md);
 
-  /* ---------- Elevação (sombras tingidas de grafite, nunca pretas) ---------- */
+  /* ---------- Elevação (sombras tingidas de marinho, nunca pretas) ---------- */
   --shadow-none:none;
-  --shadow-xs:0 1px 2px rgba(28,31,36,.06);
-  --shadow-sm:0 1px 3px rgba(28,31,36,.07), 0 1px 2px rgba(28,31,36,.04);
-  --shadow-md:0 4px 12px rgba(28,31,36,.07), 0 1px 3px rgba(28,31,36,.05);
-  --shadow-lg:0 12px 32px rgba(28,31,36,.10), 0 2px 8px rgba(28,31,36,.05);
-  --shadow-xl:0 28px 64px rgba(28,31,36,.16), 0 4px 12px rgba(28,31,36,.06);
+  --shadow-xs:0 1px 2px rgba(4,22,80,.06);
+  --shadow-sm:0 1px 3px rgba(4,22,80,.07), 0 1px 2px rgba(4,22,80,.04);
+  --shadow-md:0 4px 12px rgba(4,22,80,.07), 0 1px 3px rgba(4,22,80,.05);
+  --shadow-lg:0 12px 32px rgba(4,22,80,.10), 0 2px 8px rgba(4,22,80,.05);
+  --shadow-xl:0 28px 64px rgba(4,22,80,.16), 0 4px 12px rgba(4,22,80,.06);
   /* Anel de foco: 2px de respiro branco + 2px sólidos. O do DS de origem (tom frio
      a 35%) dava 1,41–1,67:1 em todo fundo e reprovava o 3:1 de indicador de foco
-     (WCAG 1.4.11). Aço-500 sólido passa em todos: 5,35 branco, 4,48 bone-200,
-     3,09 grafite-900, 4,36 danger-100. O respiro branco separa o anel do
-     preenchimento do próprio elemento (botão grafite, trilho do interruptor). */
-  --ring-focus:0 0 0 2px var(--white), 0 0 0 4px var(--aco-500);
+     (WCAG 1.4.11). Marinho-500 sólido passa em todos: 5,33 branco, 4,34 bone-200,
+     3,19 marinho-900, 4,34 danger-100. O respiro branco separa o anel do
+     preenchimento do próprio elemento (botão marinho, trilho do interruptor). */
+  --ring-focus:0 0 0 2px var(--white), 0 0 0 4px var(--marinho-500);
   --ring-danger:0 0 0 2px var(--white), 0 0 0 4px var(--danger-600);   /* era danger-400 a 28%: 1,45:1 */
-  --ring-inverse:0 0 0 3px rgba(244,243,239,.45);   /* foco sobre grafite (off-white a 45%) */
-  --scrim:rgba(28,31,36,.45);
-  --scrim-midia:rgba(28,31,36,.92);        /* visualizador de foto/vídeo do Chat: quase opaco */
-  --shadow-lateral:1px 0 4px rgba(28,31,36,.10);  /* coluna fixa projetando para a direita */
+  --ring-inverse:0 0 0 3px rgba(243,244,242,.45);   /* foco sobre marinho (papel a 45%) */
+  --scrim:rgba(4,22,80,.45);
+  --scrim-midia:rgba(4,22,80,.92);        /* visualizador de foto/vídeo do Chat: quase opaco */
+  --shadow-lateral:1px 0 4px rgba(4,22,80,.10);  /* coluna fixa projetando para a direita */
   --blur-overlay:blur(8px) saturate(120%);
 
   /* ---------- Movimento ---------- */
@@ -232,42 +234,43 @@
   --transition-control:background var(--dur-fast) var(--ease-standard),color var(--dur-fast) var(--ease-standard),border-color var(--dur-fast) var(--ease-standard),box-shadow var(--dur-fast) var(--ease-standard);
 
   /* ---------- Noite (só o modo noturno usa; DESIGN.md §11) ----------
-     Grafite escurecido, sem azul; night-950 fica abaixo de grafite-950. Medidas sobre
-     night-800: bone-300 (corpo) 13,2:1 · ink-300 (muted) 7,3:1 · ink-400 (subtle) 4,6:1. */
-  --night-950:#0B0C0E;
-  --night-900:#111315;
-  --night-800:#17191C;
-  --night-700:#1F2226;
-  --night-600:#2A2D32;
-  --night-500:#3B3F45;
+     Azul-marinho profundo, na matiz da marca; night-950 fica abaixo de marinho-950. Medidas
+     sobre night-800: bone-300 (corpo) 13,59:1 · ink-300 (muted) 8,23:1 · ink-400 (subtle) 4,94:1. */
+  --night-950:#030716;
+  --night-900:#060E1F;
+  --night-800:#0C1427;
+  --night-700:#131C31;
+  --night-600:#1D273D;
+  --night-500:#2E3950;
 
   /* ---------- Semântica: superfícies ---------- */
   --surface-app:var(--bone-100);
   --surface-card:var(--white);
   --surface-sunken:var(--bone-200);
   --surface-muted:var(--bone-050);
-  --surface-inverse:var(--grafite-900);
-  --surface-nav:var(--grafite-900);
+  --surface-inverse:var(--marinho-900);
+  --surface-nav:var(--marinho-900);
   --surface-nav-hover:rgba(255,255,255,.06);
   --surface-nav-active:rgba(255,255,255,.12);
   --surface-translucida:rgba(255,255,255,.5);   /* opção de enquete sobre a bolha do Chat */
-  --surface-accent-soft:var(--aco-50);
-  --surface-accent-warm:var(--ambar-100);   /* fundo âmbar suave: chip de destaque, menção na nota */
+  --surface-accent-soft:var(--marinho-50);   /* seleção, hover informativo, chip de link */
+  --surface-accent-warm:var(--salvia-100);   /* fundo sálvia suave: chip de destaque, menção na nota */
   --surface-raised:var(--white);          /* menus, popovers, sugestões */
   --surface-chat:var(--bone-200);         /* fundo da conversa do Chat */
   --surface-bubble-in:var(--white);       /* bolha recebida */
-  --surface-bubble-out:var(--aco-100);    /* bolha enviada */
+  --surface-bubble-out:var(--salvia-100); /* bolha enviada: sálvia bem clara */
   --surface-avatar:var(--bone-400);
-  --surface-avatar-grupo:var(--aco-200);
-  --surface-badge:var(--grafite-900);     /* contador de não lidas */
+  /* avatar de grupo: o ícone é branco (--text-on-brand); salvia-500 dá 3,61:1, salvia-200 dava 1,56:1 */
+  --surface-avatar-grupo:var(--salvia-500);
+  --surface-badge:var(--salvia-600);      /* contador de não lidas: acento sálvia, 5,75:1 com o número branco */
 
   /* ---------- Tela de entrada (exceção documentada, DESIGN.md §7) ---------- */
-  --abertura-veu:rgba(19,21,24,.82);    /* grafite-950 a 82%: garante 6,08:1 no pior caso (seda em aço-400) */
-  --abertura-veu-fim:rgba(19,21,24,0);
+  --abertura-veu:rgba(1,10,53,.82);    /* marinho-950 a 82%: no pior caso (seda em sálvia-500) a linha "Sistema" fica em 6,32:1 e o símbolo em 4,37:1 */
+  --abertura-veu-fim:rgba(1,10,53,0);
   /* as três cores da seda (WebGL); js/ui-abertura.js as lê daqui e, se alguma não for hex, fica sem seda */
-  --abertura-seda-1:var(--grafite-950);
-  --abertura-seda-2:var(--grafite-600);
-  --abertura-seda-3:var(--aco-400);
+  --abertura-seda-1:var(--marinho-950);
+  --abertura-seda-2:var(--marinho-600);
+  --abertura-seda-3:var(--salvia-500);
 
   /* ---------- Semântica: texto ---------- */
   --text-heading:var(--ink-900);
@@ -275,38 +278,45 @@
   --text-muted:var(--ink-500);
   --text-subtle:var(--ink-400);
   --text-on-inverse:var(--bone-200);
-  --text-on-inverse-muted:rgba(244,243,239,.62);
-  --text-on-inverse-subtle:rgba(244,243,239,.42);   /* rótulos de seção da sidebar */
-  --text-link:var(--aco-600);
-  --text-link-hover:var(--aco-500);
-  --text-accent:var(--ambar-700);
+  --text-on-inverse-muted:rgba(243,244,242,.62);
+  --text-on-inverse-subtle:rgba(243,244,242,.42);   /* rótulos de seção da sidebar */
+  --text-link:var(--marinho-700);         /* 10,26:1 sobre branco, 9,30:1 sobre bone-100 */
+  --text-link-hover:var(--marinho-500);
+  --text-accent:var(--salvia-700);         /* texto de destaque em sálvia: 6,50:1 sobre --surface-accent-warm */
   --text-on-badge:var(--white);
   --text-on-brand:#FFF;                  /* texto sobre cor fixa de marca/dado (tag, departamento, enviar) */
   /* a barra lateral é escura nos dois temas: estes não invertem (ao contrário de --text-on-inverse) */
   --text-on-nav:var(--bone-200);
-  --text-on-nav-muted:rgba(244,243,239,.62);
-  --text-on-nav-subtle:rgba(244,243,239,.42);
+  --text-on-nav-muted:rgba(243,244,242,.62);    /* 6,49:1 sobre marinho-900 */
+  --text-on-nav-subtle:rgba(243,244,242,.42);   /* 3,62:1: só rótulo de seção em caixa alta */
+
+  /* ---------- Logo (DESIGN.md §7, "Logo") ----------
+     O símbolo é gráfico, não texto: exige 3:1. Sálvia sobre o marinho dá 4,70:1. */
+  --marca-logo:var(--salvia-500);           /* símbolo VA sobre --surface-nav (barra lateral) */
+  --marca-logo-inverso:var(--salvia-500);   /* símbolo VA sobre --surface-inverse (bloco do trilho do Chat) */
+  --logo-marca:var(--salvia-500);           /* símbolo no logo completo (tela de entrada) */
+  --logo-texto:var(--marca-papel);          /* palavras do logo completo, sobre o marinho do login (14,31:1 sob o véu) */
 
   /* ---------- Semântica: bordas ---------- */
   --border-subtle:var(--bone-300);
   --border-default:var(--bone-400);
-  --border-focus:var(--aco-400);
+  --border-focus:var(--marinho-500);
   --border-inverse:rgba(255,255,255,.12);
 
   /* ---------- Caixa de seleção (checkbox) ---------- */
   /* Borda da caixa vazia. O DS usa --border-default (bone-400), que dá 1,59:1
      sobre branco e 1,37:1 sobre bone-200 (fundo da conversa do Chat) — abaixo do
      3:1 que a WCAG 1.4.11 exige do contorno de um controle, sem o qual a caixa vazia
-     não se identifica. ink-400 dá 3,85 (branco) · 3,68 (bone-050) · 3,46 (bone-100)
-     · 3,22 (bone-200) · 3,39 (aco-50). Divergência deliberada do DS, no mesmo
+     não se identifica. ink-400 dá 3,71 (branco) · 3,52 (bone-050) · 3,36 (bone-100)
+     · 3,02 (bone-200) · 3,28 (marinho-50). Divergência deliberada do DS, no mesmo
      espírito do --warning-600 (DESIGN.md §4). */
   --check-borda:var(--ink-400);
   /* Trilho do interruptor desligado: mesma conta do checkbox — bone-400 dava 1,59:1
      sobre branco e o controle não se via; ink-400 passa do 3:1 de componente. */
   --control-track-off:var(--ink-400);
-  /* Confirmação de leitura (duplo check) no Chat: o tom frio sobre a bolha enviada
-     ficava perto de 3:1 (aco-400 sobre aco-100: 3,25:1) e o "lida" quase não se
-     via; success-600 dá 4,9:1. */
+  /* Confirmação de leitura (duplo check) no Chat: um tom de marca sobre a bolha
+     enviada ficava perto de 3:1 e o "lida" quase não se via; success-600 dá
+     4,89:1 sobre salvia-100. */
   --tick-lida:var(--success-600);
   /* Campo de texto (input, textarea, select) — hoje branco; ganha valor próprio no
      modo noturno, por isso não se usa --surface-card nele. */
@@ -320,16 +330,16 @@
   --check-marca-parcial:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3C/svg%3E");
 
   /* ---------- Semântica: ações ---------- */
-  --btn-primary-bg:var(--grafite-900);
-  --btn-primary-bg-hover:var(--grafite-700);
-  --btn-primary-bg-active:var(--grafite-950);
+  --btn-primary-bg:var(--marinho-900);
+  --btn-primary-bg-hover:var(--marinho-700);
+  --btn-primary-bg-active:var(--marinho-950);
   --btn-primary-fg:var(--bone-200);
   --btn-secondary-bg:var(--white);
   --btn-secondary-bg-hover:var(--bone-100);
   --btn-secondary-fg:var(--ink-900);
-  --btn-accent-bg:var(--ambar-400);
-  --btn-accent-bg-hover:var(--ambar-500);
-  --btn-accent-fg:var(--grafite-900);
+  --btn-accent-bg:var(--salvia-600);       /* botão verde: sálvia escurecida, 5,75:1 com texto branco */
+  --btn-accent-bg-hover:var(--salvia-700);
+  --btn-accent-fg:var(--white);
   --btn-ghost-fg:var(--ink-700);
   --btn-ghost-bg-hover:var(--bone-200);
   --btn-danger-bg:var(--danger-600);
@@ -338,9 +348,9 @@
 
   /* ---------- Semântica: estado (chips, avisos, deltas) ---------- */
   --state-success-bg:var(--success-100);  --state-success-fg:var(--success-600);  --state-success-border:var(--success-border);
-  --state-warning-bg:var(--warning-100);  --state-warning-fg:var(--warning-600);  --state-warning-border:var(--ambar-300);
+  --state-warning-bg:var(--warning-100);  --state-warning-fg:var(--warning-600);  --state-warning-border:var(--warning-300);
   --state-danger-bg:var(--danger-100);    --state-danger-fg:var(--danger-600);    --state-danger-border:var(--danger-border);
-  --state-info-bg:var(--info-100);        --state-info-fg:var(--info-600);        --state-info-border:var(--aco-200);
+  --state-info-bg:var(--info-100);        --state-info-fg:var(--info-600);        --state-info-border:var(--marinho-200);
   /* amarelo suave: recesso / férias coletivas / ponto facultativo no calendário */
   --state-note-bg:#FBF3D6;   --state-note-fg:#7A5A12;   --state-note-border:#EAD99A;
   /* status do atendimento (Chat), no visual do ChatGuru escolhido pelo dono (05/10/2026):
@@ -358,10 +368,10 @@
   --presence-on:var(--success-400);  --presence-off:var(--ink-300);  --presence-ring:rgba(76,150,115,.25);
 
   /* ---------- Série de dados (README §4 · Data visualisation) ---------- */
-  --chart-1:var(--grafite-700);
-  --chart-2:var(--aco-400);
-  --chart-3:var(--ambar-400);
-  --chart-4:var(--aco-200);
+  --chart-1:var(--marinho-700);
+  --chart-2:var(--salvia-500);
+  --chart-3:var(--marinho-300);
+  --chart-4:var(--salvia-200);
   --chart-5:var(--success-400);
   --chart-grid:var(--bone-300);
 
@@ -384,14 +394,14 @@
      3,6:1 sobre branco — abaixo do AA. Sobem para ink-500 (5,7:1).
      --text-subtle segue disponível direto, para placeholder e afins. */
   --text-faint:var(--text-muted);
-  --primary:var(--grafite-900);
-  --primary-2:var(--grafite-700);
+  --primary:var(--marinho-900);
+  --primary-2:var(--marinho-700);
   --grad:var(--chart-1);              /* gradientes não existem mais no sistema */
   --green:var(--success-600);
   --amber:var(--warning-600);
   --red:var(--danger-600);
   --cyan:var(--info-600);
-  --purple:var(--aco-600);
+  --purple:var(--marinho-600);
   --radius:var(--radius-card);
   --shadow:var(--shadow-lg);
 }
@@ -410,31 +420,33 @@
   --surface-inverse:var(--bone-200);
   --surface-nav:var(--night-950);
   --surface-translucida:rgba(255,255,255,.08);
-  --surface-accent-soft:rgba(92,127,158,.18);    /* aço-400 a 18% */
-  --surface-accent-warm:rgba(217,164,65,.16);    /* âmbar-400 a 16% */
+  --surface-accent-soft:rgba(143,162,200,.16);   /* marinho-300 a 16% */
+  --surface-accent-warm:rgba(117,140,127,.2);    /* sálvia-500 a 20% */
   --surface-raised:var(--night-700);
   --surface-chat:var(--night-950);
   --surface-bubble-in:var(--night-800);
-  --surface-bubble-out:var(--grafite-700);
+  --surface-bubble-out:var(--salvia-800);
   --surface-avatar:var(--night-500);
-  --surface-avatar-grupo:var(--aco-600);
-  --surface-badge:var(--bone-200);
+  --surface-avatar-grupo:var(--salvia-600);
+  --surface-badge:var(--salvia-300);       /* contador: marinho-900 sobre ele dá 8,32:1 */
 
   --text-heading:var(--bone-100);
   --text-body:var(--bone-300);
   --text-muted:var(--ink-300);
   --text-subtle:var(--ink-400);
-  --text-on-inverse:var(--grafite-900);
-  --text-on-inverse-muted:rgba(28,31,36,.7);
-  --text-on-inverse-subtle:rgba(28,31,36,.5);
-  --text-link:var(--aco-300);
-  --text-link-hover:var(--aco-200);
-  --text-accent:var(--ambar-300);
-  --text-on-badge:var(--grafite-900);
+  --text-on-inverse:var(--marinho-900);
+  --text-on-inverse-muted:rgba(4,22,80,.7);
+  --text-on-inverse-subtle:rgba(4,22,80,.5);
+  --text-link:var(--marinho-300);
+  --text-link-hover:var(--marinho-200);
+  --text-accent:var(--salvia-300);
+  --text-on-badge:var(--marinho-900);
+  /* no escuro o bloco do trilho do Chat é claro (bone-200): salvia-500 daria 2,94:1, salvia-600 dá 4,68:1 */
+  --marca-logo-inverso:var(--salvia-600);
 
   --border-subtle:var(--night-600);
   --border-default:var(--night-500);
-  --border-focus:var(--aco-300);
+  --border-focus:var(--marinho-300);
   --check-borda:var(--ink-300);
   --control-track-off:var(--ink-300);
   --tick-lida:var(--success-400);
@@ -443,7 +455,7 @@
   --btn-primary-bg:var(--bone-200);
   --btn-primary-bg-hover:var(--bone-300);
   --btn-primary-bg-active:var(--bone-400);
-  --btn-primary-fg:var(--grafite-900);
+  --btn-primary-fg:var(--marinho-900);
   --btn-secondary-bg:var(--night-800);
   --btn-secondary-bg-hover:var(--night-700);
   --btn-secondary-fg:var(--bone-100);
@@ -451,29 +463,30 @@
   --btn-ghost-bg-hover:var(--night-700);
 
   --state-success-bg:rgba(76,150,115,.18);  --state-success-fg:var(--success-400);  --state-success-border:rgba(76,150,115,.4);
-  --state-warning-bg:rgba(217,164,65,.16);  --state-warning-fg:var(--ambar-300);    --state-warning-border:rgba(217,164,65,.4);
+  --state-warning-bg:rgba(217,164,65,.16);  --state-warning-fg:var(--warning-300);  --state-warning-border:rgba(217,164,65,.4);
   --state-danger-bg:rgba(194,86,75,.18);    --state-danger-fg:var(--danger-300);    --state-danger-border:rgba(224,138,128,.4);
-  --state-info-bg:rgba(92,127,158,.18);     --state-info-fg:var(--aco-300);         --state-info-border:rgba(145,168,189,.4);
+  --state-info-bg:rgba(143,162,200,.16);    --state-info-fg:var(--marinho-200);     --state-info-border:rgba(143,162,200,.4);
   --state-note-bg:rgba(230,201,106,.18); --state-note-fg:#E6C96A; --state-note-border:rgba(230,201,106,.45);
   /* as pílulas (-fill) são iguais nos dois temas; só a célula/número da tabela muda */
   --status-aberto-fg:var(--danger-300);       --status-aberto-bg:rgba(194,86,75,.22);
   --status-atendimento-fg:var(--success-300); --status-atendimento-bg:rgba(76,150,115,.22);
-  --status-aguardando-fg:var(--ambar-400);    --status-aguardando-bg:rgba(217,164,65,.2);
+  --status-aguardando-fg:var(--warning-400);   --status-aguardando-bg:rgba(217,164,65,.2);
   --status-resolvido-fg:var(--success-200);   --status-resolvido-bg:rgba(76,150,115,.16);
   --status-fechado-fg:var(--ink-300);         --status-fechado-bg:rgba(168,167,164,.14);
   --presence-on:var(--success-300);  --presence-off:var(--ink-500);  --presence-ring:rgba(125,186,156,.25);
 
-  /* no escuro a sombra de grafite some: elevação preta discreta, e a borda carrega o resto */
+  /* no escuro a sombra de marinho some: elevação preta discreta, e a borda carrega o resto */
   --shadow-xs:0 1px 2px rgba(0,0,0,.35);
   --shadow-sm:0 1px 3px rgba(0,0,0,.4), 0 1px 2px rgba(0,0,0,.3);
   --shadow-md:0 4px 12px rgba(0,0,0,.45), 0 1px 3px rgba(0,0,0,.3);
   --shadow-lg:0 12px 32px rgba(0,0,0,.55), 0 2px 8px rgba(0,0,0,.35);
   --shadow-xl:0 28px 64px rgba(0,0,0,.65), 0 4px 12px rgba(0,0,0,.4);
   --shadow-lateral:1px 0 4px rgba(0,0,0,.4);
-  --ring-focus:0 0 0 2px var(--night-900), 0 0 0 4px var(--aco-300);
+  --ring-focus:0 0 0 2px var(--night-900), 0 0 0 4px var(--marinho-300);
   --ring-danger:0 0 0 2px var(--night-900), 0 0 0 4px var(--danger-300);
   --scrim:rgba(0,0,0,.6);
-  --chart-1:var(--aco-300);
+  --chart-1:var(--marinho-300);
+  --chart-3:var(--marinho-500);   /* a série 3 do claro (marinho-300) viraria a série 1 do escuro */
   --chart-grid:var(--night-600);
 }
 

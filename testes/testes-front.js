@@ -47,20 +47,25 @@ function GREP(pastas, regex) {
 
 /* lerTokensClaro() — mapa nome→'#RRGGBB' do tema claro. Junta todos os blocos cujo seletor é
    exatamente `:root` em css/tokens.css (os do modo noturno têm outro seletor e ficam de fora),
-   resolve var(--x) recursivamente e devolve só o que termina em hex (#FFF vira #FFFFFF). */
-function lerTokensClaro() {
+   resolve var(--x) recursivamente e devolve só o que termina em hex (#FFF vira #FFFFFF).
+   lerTokensEscuro() — o mesmo, com os blocos `:root[data-tema="escuro"]` por cima do claro. */
+function lerTokensClaro() { return lerTokens([':root']); }
+function lerTokensEscuro() { return lerTokens([':root', ':root[data-tema="escuro"]']); }
+function lerTokens(seletores) {
   const css = fs.readFileSync(path.join(RAIZ, 'css/tokens.css'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
   const brutos = {};
   const BLOCO = /([^{}]+)\{([^{}]*)\}/g;
   let m;
-  while ((m = BLOCO.exec(css))) {
-    if (m[1].trim() !== ':root') continue;
-    m[2].split(';').forEach(d => {
+  const blocos = [];
+  while ((m = BLOCO.exec(css))) if (seletores.includes(m[1].trim())) blocos.push([seletores.indexOf(m[1].trim()), m[2]]);
+  // a ordem dos seletores manda (o escuro por cima do claro), não a ordem no arquivo
+  blocos.sort((a, b) => a[0] - b[0]).forEach(([, corpo]) => {
+    corpo.split(';').forEach(d => {
       const i = d.indexOf(':');
       const nome = d.slice(0, i).trim();
       if (i > 0 && nome.startsWith('--')) brutos[nome] = d.slice(i + 1).trim();
     });
-  }
+  });
   const resolver = (v, prof) => {
     const r = /^var\((--[\w-]+)\)$/.exec(v);
     return r && prof < 20 && brutos[r[1]] !== undefined ? resolver(brutos[r[1]], prof + 1) : v;
@@ -364,7 +369,7 @@ const esperar = ms => new Promise(r => setTimeout(r, ms));
   await caso('cor segura e escape', () => {
     const ctx = novoContexto({ banco: null, sessao: false });
     afirma(run(ctx, "corSegura('#5e8ab4')") === '#5e8ab4', 'hex válido passa');
-    afirma(run(ctx, "corSegura('red;\" onmouseover=\"alert(1)')") === '#5C7F9E' && run(ctx, 'COR_PADRAO_DADO') === '#5C7F9E', 'injeção vira a cor padrão (COR_PADRAO_DADO, aço-400)');
+    afirma(run(ctx, "corSegura('red;\" onmouseover=\"alert(1)')") === '#758C7F' && run(ctx, 'COR_PADRAO_DADO') === '#758C7F', 'injeção vira a cor padrão (COR_PADRAO_DADO, sálvia da marca)');
     afirma(run(ctx, "esc('<img src=x onerror=alert(1)>')").indexOf('<') === -1, 'esc remove <');
   });
 
@@ -1600,6 +1605,14 @@ const esperar = ms => new Promise(r => setTimeout(r, ms));
     afirma(/<title><\/title>/.test(html) && (html.match(/data-marca="/g) || []).length >= 5, 'title vazio e pontos data-marca');
     const ctx = novoContexto({ banco: null, soStore: true });
     afirma(run(ctx, 'ESCRITORIO.sistema') === 'Vasques Alves · Sistema' && run(ctx, 'Object.isFrozen(ESCRITORIO)') && run(ctx, 'STORAGE_KEY') === run(ctx, 'ESCRITORIO.chaves.estado'), 'store usa a chave do escritório');
+    // logo em vetor sem cor própria: o símbolo herda currentColor, o logo completo lê os tokens
+    const HEX = /#[0-9a-f]{3,8}\b/i;
+    afirma(/fill="currentColor"/.test(ESC.logoSVG) && !HEX.test(ESC.logoSVG) && /aria-hidden="true"/.test(ESC.logoSVG), 'logoSVG: símbolo em currentColor, sem hex');
+    afirma(/var\(--logo-marca\)/.test(ESC.logoCompletoSVG) && /var\(--logo-texto\)/.test(ESC.logoCompletoSVG) && !HEX.test(ESC.logoCompletoSVG)
+      && ESC.logoCompletoSVG.includes('role="img" aria-label="' + ESC.nome + '"'), 'logoCompletoSVG: símbolo e palavras nos tokens, rótulo = ESCRITORIO.nome, sem hex');
+    afirma(/data-marca="logoCompleto"/.test(html) && /data-marca="assinatura"/.test(html) && !/abertura-monograma|abertura-nome/.test(html)
+      && /'logoCompleto'\) el\.innerHTML = ESCRITORIO\.logoCompletoSVG/.test(fs.readFileSync(path.join(RAIZ, 'js/ui-core.js'), 'utf8')), 'tela de entrada com o logo completo; aplicarMarca preenche logoCompleto');
+    afirma(/rel="icon"[^\n]*%23041650[^\n]*%23758C7F/.test(html), 'favicon: símbolo sálvia sobre marinho');
   });
 
   await caso('publicar.py do MV: projeto, time e token do escritório', () => {
@@ -1698,21 +1711,35 @@ const esperar = ms => new Promise(r => setTimeout(r, ms));
     const achados = GREP(['css/styles.css', 'css/chat.css', 'js'], /#[0-9a-fA-F]{6}\b/)
       .filter(l => !/^js\/(icones|emojis)\.js:/.test(l) && !/cor-dado/.test(linhaInteira(l)));
     afirma(achados.length === 0, 'hex fora do tokens:\n    ' + achados.join('\n    '));
-    afirma(GREP(['css', 'js'], /--navy-|--blue-|--terra-|--arca-|surface-terra-soft/).length === 0, 'rampas antigas renomeadas: ' + GREP(['css', 'js'], /--navy-|--blue-|--terra-|surface-terra-soft/).slice(0, 5).join(' | '));
-    // rgba da paleta antiga (azul, navy, bone, terracota, ink azulado): arquivos inteiros, sem o corte do GREP
+    afirma(GREP(['css', 'js'], /--navy-|--blue-|--terra-|--arca-|surface-terra-soft|--grafite-|--aco-|--ambar-|--marca-(grafite|aco|offwhite|ambar)/).length === 0, 'rampas antigas renomeadas: ' + GREP(['css', 'js'], /--navy-|--blue-|--terra-|surface-terra-soft|--grafite-|--aco-|--ambar-|--marca-(grafite|aco|offwhite|ambar)/).slice(0, 5).join(' | '));
+    // rgba da paleta antiga (azul, navy, bone, terracota, ink azulado; depois grafite, off-white, aço): arquivos inteiros, sem o corte do GREP
     const fontes = ['css/tokens.css', 'css/styles.css', 'css/chat.css', ...fs.readdirSync(path.join(RAIZ, 'js')).map(f => 'js/' + f)]
       .map(r => fs.readFileSync(path.join(RAIZ, r), 'utf8')).join('\n');
-    afirma(!/rgba\((94,138,180|140,168,199|8,31,44|5,22,31|239,238,234|229,158,109|162,172,180)/.test(fontes), 'rgba da paleta antiga fora de uso');
+    afirma(!/rgba\((94,138,180|140,168,199|8,31,44|5,22,31|239,238,234|229,158,109|162,172,180|28,31,36|19,21,24|244,243,239|92,127,158|145,168,189)/.test(fontes), 'rgba da paleta antiga fora de uso');
   });
 
   await caso('paleta: contraste AA nas combinações que mudaram de família', () => {
     const tokens = lerTokensClaro();
-    const pares = [['--text-link', '--white', 4.5], ['--text-link', '--bone-100', 4.5], ['--btn-primary-fg', '--btn-primary-bg', 4.5], ['--btn-accent-fg', '--btn-accent-bg', 4.5], ['--text-on-nav', '--surface-nav', 4.5], ['--warning-600', '--warning-100', 4.5], ['--text-body', '--surface-app', 4.5], ['--text-muted', '--surface-card', 4.5], ['--aco-500', '--white', 3]];
-    const ruins = pares.filter(([a, b, min]) => !tokens[a] || !tokens[b] || contraste(tokens[a], tokens[b]) < min)
-      .map(([a, b, min]) => a + ' × ' + b + ' = ' + (tokens[a] && tokens[b] ? contraste(tokens[a], tokens[b]).toFixed(2) : 'sem hex') + ' (mín. ' + min + ')');
+    // texto ≥ 4,5; foco, símbolo do logo e ícone ≥ 3 (WCAG 1.4.11). O anel de foco é marinho-500 sólido.
+    const pares = [['--text-link', '--white', 4.5], ['--text-link', '--bone-100', 4.5], ['--btn-primary-fg', '--btn-primary-bg', 4.5], ['--btn-accent-fg', '--btn-accent-bg', 4.5], ['--text-on-nav', '--surface-nav', 4.5], ['--warning-600', '--warning-100', 4.5], ['--text-body', '--surface-app', 4.5], ['--text-muted', '--surface-card', 4.5], ['--marinho-500', '--white', 3], ['--marinho-500', '--bone-200', 3],
+      ['--text-accent', '--surface-accent-warm', 4.5], ['--text-on-badge', '--surface-badge', 4.5], ['--text-on-brand', '--surface-avatar-grupo', 3],
+      ['--marca-logo', '--surface-nav', 3], ['--logo-marca', '--surface-nav', 3], ['--marca-logo-inverso', '--surface-inverse', 3]];
+    const medir = (tk, lista) => lista.filter(([a, b, min]) => !tk[a] || !tk[b] || contraste(tk[a], tk[b]) < min)
+      .map(([a, b, min]) => a + ' × ' + b + ' = ' + (tk[a] && tk[b] ? contraste(tk[a], tk[b]).toFixed(2) : 'sem hex') + ' (mín. ' + min + ')');
+    const ruins = medir(tokens, pares);
     afirma(ruins.length === 0, 'abaixo do mínimo: ' + ruins.join('; '));
+    // modo noturno: o bloco do trilho do Chat fica claro (bone-200) e o símbolo troca de tom
+    const escuro = lerTokensEscuro();
+    const paresEscuro = [['--text-body', '--surface-card', 4.5], ['--text-muted', '--surface-card', 4.5], ['--text-link', '--surface-card', 4.5], ['--text-accent', '--surface-card', 4.5], ['--btn-primary-fg', '--btn-primary-bg', 4.5], ['--text-on-badge', '--surface-badge', 4.5], ['--text-on-nav', '--surface-nav', 4.5],
+      ['--marca-logo', '--surface-nav', 3], ['--logo-marca', '--surface-nav', 3], ['--marca-logo-inverso', '--surface-inverse', 3]];
+    const ruinsEscuro = medir(escuro, paresEscuro);
+    afirma(ruinsEscuro.length === 0, 'modo noturno abaixo do mínimo: ' + ruinsEscuro.join('; '));
     afirma(/^#[0-9a-f]{6}$/i.test(tokens['--abertura-seda-1'] || '') && /^#[0-9a-f]{6}$/i.test(tokens['--abertura-seda-2'] || '') && /^#[0-9a-f]{6}$/i.test(tokens['--abertura-seda-3'] || ''), 'tokens da seda resolvem para hex');
-    afirma(tokens['--marca-grafite-900'] === '#1C1F24' && tokens['--marca-grafite-700'] === '#2E333B' && tokens['--marca-aco-400'] === '#5C7F9E' && tokens['--marca-aco-200'] === '#C5D0DA' && tokens['--marca-offwhite'] === '#F4F3EF' && tokens['--marca-ambar'] === '#D9A441', 'seis cores da paleta neutra');
+    afirma(tokens['--marca-marinho-900'] === '#041650' && tokens['--marca-marinho-700'] === '#1E3C86' && tokens['--marca-salvia-500'] === '#758C7F' && tokens['--marca-salvia-200'] === '#C4D2CA' && tokens['--marca-papel'] === '#F3F4F2' && tokens['--marca-cinza'] === '#D2D3D1', 'seis cores da identidade Vasques Alves');
+    // rampas monotônicas: cada degrau mais claro que o anterior (luminância pelo contraste com o preto)
+    const lumOrdem = (pref, degraus) => degraus.map(d => tokens[pref + d]).every((h, i, l) => h && (i === 0 || contraste(h, '#000000') > contraste(l[i - 1], '#000000')));
+    afirma(lumOrdem('--marinho-', [950, 900, 800, 700, 600, 500, 400, 300, 200, 100, 50]) && lumOrdem('--salvia-', [800, 700, 600, 500, 400, 300, 200, 100, 50]), 'rampas marinho e sálvia monotônicas');
+    afirma(contraste(tokens['--salvia-600'], '#FFFFFF') >= 4.5 && tokens['--chart-2'] === '#758C7F' && tokens['--abertura-seda-3'] === '#758C7F', 'sálvia escura carrega texto branco; série 2 e seda na sálvia da marca');
     // a abertura lê a seda dos tokens e, sem eles, cai no caminho sem WebGL; nenhum hex de reserva no JS
     const ab = fs.readFileSync(path.join(RAIZ, 'js/ui-abertura.js'), 'utf8');
     afirma(/getPropertyValue\('--abertura-seda-' \+ n\)/.test(ab) && !/SEDA\.cores|cores:\s*\[/.test(ab), 'abertura lê --abertura-seda-1..3');

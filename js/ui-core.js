@@ -28,6 +28,7 @@ const UI = (() => {
     document.querySelectorAll('[data-marca]').forEach(el => {
       const k = el.getAttribute('data-marca');
       if (k === 'logo') el.innerHTML = ESCRITORIO.logoSVG;
+      else if (k === 'logoCompleto') el.innerHTML = ESCRITORIO.logoCompletoSVG;
       else if (k === 'versao') el.textContent = ESCRITORIO.curto + ' · v' + APP_VERSAO.replace(/\.\d+$/, '');
       else el.textContent = ESCRITORIO[k] || '';
     });
@@ -110,8 +111,8 @@ const UI = (() => {
      branco e não passa no AA. Nunca troque um pelo outro. */
   function scoreColorHex(n) {
     if (n >= 80) return 'var(--success-400)';
-    if (n >= 60) return 'var(--chart-2)';
-    if (n >= 40) return 'var(--ambar-500)';
+    if (n >= 60) return 'var(--info-400)';
+    if (n >= 40) return 'var(--warning-400)';
     return 'var(--danger-400)';
   }
 

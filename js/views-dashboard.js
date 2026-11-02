@@ -446,7 +446,7 @@ UI.registrar('dashboard', () => {
   const abertosP = leadsP.filter(l => ETAPAS_ABERTAS.includes(l.etapa));
   const temps = TEMPERATURAS.map(t => ({
     label: t, value: abertosP.filter(l => l.temperatura === t).length,
-    color: t === 'Quente' ? 'var(--danger-400)' : t === 'Frio' ? 'var(--chart-2)' : 'var(--ambar-400)'
+    color: t === 'Quente' ? 'var(--danger-400)' : t === 'Frio' ? 'var(--info-400)' : 'var(--warning-400)'
   }));
   const areas = Object.entries(contar(leadsP.filter(l => l.area), l => l.area)).sort((a, b) => b[1] - a[1]).slice(0, 8)
     .map(([label, value]) => ({ label, value, color: 'var(--chart-4)' }));
