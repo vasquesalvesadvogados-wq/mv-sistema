@@ -1,4 +1,4 @@
-# Marques e Vasques · Sistema: runbook de operação
+# Vasques Alves · Sistema: runbook de operação
 
 Este guia serve a quem opera o sistema, o Arca e os administradores do escritório. As chaves e senhas ficam no `MV-CHAVES.md`, guardado fora do repositório.
 
@@ -18,7 +18,7 @@ Ordem sempre: **SQL aditivo → front → SQL restritivo → motor.** Publicar s
 - `HC_URL`: URL de ping do Healthchecks.io (alerta de queda por e-mail).
 - `ANTHROPIC_API_KEY`: chave do assistente de IA.
 - `GROQ_API_KEY` (opcional): transcrição de áudio.
-- `NOME_SISTEMA`: "Marques e Vasques"; sem ela o alerta sai "Motor do Chat de Sistema".
+- `NOME_SISTEMA`: "Vasques Alves"; sem ela o alerta sai "Motor do Chat de Sistema".
 - `RESETAR_SESSAO`: só quando preciso; veja a seção 2.
 
 ## 2. Parear o WhatsApp (QR)

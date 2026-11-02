@@ -1,4 +1,4 @@
-# Marques e Vasques · Sistema: roteiro de ativação
+# Vasques Alves · Sistema: roteiro de ativação
 
 Regra permanente: **nenhuma conta ou token de outra operação é reutilizada.** Tudo nasce no e-mail corporativo do escritório. O Arca entra em cada serviço como membro convidado, nunca como dono. Os tokens do Arca ficam em `~/.mv-*`.
 
@@ -32,7 +32,7 @@ Pode começar já, em paralelo.
    - `HC_URL`: URL de ping do Healthchecks.io.
    - `ANTHROPIC_API_KEY`: chave do assistente de IA.
    - `GROQ_API_KEY` (opcional): transcrição de áudio.
-   - `NOME_SISTEMA` = "Marques e Vasques": sem ela o alerta sai "Motor do Chat de Sistema".
+   - `NOME_SISTEMA` = "Vasques Alves": sem ela o alerta sai "Motor do Chat de Sistema".
    - `RESETAR_SESSAO`: só quando preciso refazer o pareamento.
 6. [ ] Parear o QR com o chip do escritório.
 7. [ ] Testar envio e recebimento: texto, mídia e grupo.

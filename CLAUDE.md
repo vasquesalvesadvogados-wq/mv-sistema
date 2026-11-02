@@ -1,6 +1,6 @@
-# Marques e Vasques · Sistema — regras para o Claude
+# Vasques Alves · Sistema — regras para o Claude
 
-Sistema interno do escritório Marques e Vasques Advogados (sócios Thiago e Vanessa), feito pelo Arca:
+Sistema interno do escritório Vasques Alves Advogados (sócios Thiago e Vanessa), feito pelo Arca:
 **Início** (hub) + **Chat** (WhatsApp do escritório, `#/atendimento`) + **CRM** (dashboard, leads,
 contratos, agenda, cadências, playbook) + **Usuários e alçadas** (`#/usuarios`, só admin) + Configurações.
 Front em JS puro, sem build (`index.html` + `js/` + `css/`); motor Node/Baileys em `motor/` (Railway).

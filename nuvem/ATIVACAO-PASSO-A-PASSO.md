@@ -95,7 +95,7 @@ Ordem de subida: Supabase → GitHub → Vercel → primeiro admin → Railway �
    "Service Name" `mv-motor`.
 4. **Variáveis.** Serviço `mv-motor` → aba "Variables" → "+ New Variable" (ou "Raw Editor"):
    `SUPABASE_URL` (Project URL do Supabase), `SUPABASE_SERVICE_KEY` (service_role),
-   `NOME_SISTEMA` = `Marques e Vasques`, `HC_URL` (etapa 6), `ANTHROPIC_API_KEY` (etapa 7, opcional),
+   `NOME_SISTEMA` = `Vasques Alves`, `HC_URL` (etapa 6), `ANTHROPIC_API_KEY` (etapa 7, opcional),
    `GROQ_API_KEY` (opcional). Ou passe os valores ao Claude, que grava pelo CLI.
 5. **Saúde e reinício.** Serviço → Settings → Deploy: "Healthcheck Path" = `/`; "Restart Policy" =
    Always; Replicas = 1 (não aumente nunca: duas réplicas derrubam o WhatsApp uma da outra).

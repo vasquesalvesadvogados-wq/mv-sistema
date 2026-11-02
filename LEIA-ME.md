@@ -1,6 +1,6 @@
-# Marques e Vasques · Sistema: guia de uso
+# Vasques Alves · Sistema: guia de uso
 
-O sistema reúne em um só lugar o WhatsApp do escritório, o acompanhamento de clientes e a gestão de acessos da equipe. Foi feito pelo Arca para o Marques e Vasques Advogados.
+O sistema reúne em um só lugar o WhatsApp do escritório, o acompanhamento de clientes e a gestão de acessos da equipe. Foi feito pelo Arca para o Vasques Alves Advogados.
 
 ## O que ele faz
 - **Chat**: o WhatsApp do escritório no computador, com a equipe toda atendendo pelo mesmo número.

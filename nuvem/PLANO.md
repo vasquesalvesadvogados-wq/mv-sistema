@@ -1,4 +1,4 @@
-# Marques e Vasques · Sistema: plano
+# Vasques Alves · Sistema: plano
 
 ## O que é
 Um sistema só, em três partes:

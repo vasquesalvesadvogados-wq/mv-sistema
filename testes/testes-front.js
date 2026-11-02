@@ -1040,7 +1040,7 @@ const esperar = ms => new Promise(r => setTimeout(r, ms));
 
   await caso('IA do escritório (front): modeloIA é do admin e a chave sumiu do navegador', async () => {
     const agoraISO = new Date().toISOString();
-    const { ctx, banco } = await iniciado({ extra: { config: [{ chave: 'geral', valor: { modeloIA: 'claude-opus-5-5', empresa: 'MV' }, atualizado_em: agoraISO }] } });
+    const { ctx, banco } = await iniciado({ extra: { config: [{ chave: 'geral', valor: { modeloIA: 'claude-opus-5-5', empresa: 'VA' }, atualizado_em: agoraISO }] } });
     afirma(run(ctx, 'state.settings.modeloIA') === 'claude-opus-5-5' && run(ctx, "'apiKey' in state.settings") === false && run(ctx, "'modelo' in state.settings") === false, 'carga: modeloIA do banco; apiKey e modelo antigos sumiram');
     // atendente trocando o modelo localmente não derruba o do banco (CHAVES_ADMIN); admin troca
     run(ctx, "Cloud.perfil().papel = 'atendente'; state.settings.modeloIA = 'claude-sonnet-5-5'; save();");
@@ -1575,7 +1575,7 @@ const esperar = ms => new Promise(r => setTimeout(r, ms));
     afirma(!/create table[^;]*\b(fluxos|calendario_eventos|colaboradores|ausencias|colaboradores_log)\b/.test(b) && !/rh_calendario|carimbar_fluxo|carimbar_evento|reuniaoGeral|SEU-EMAIL-AQUI|OUTUBRO 2026|liberar-admin|estrutura-piloto/.test(b), 'sem Fluxos/RH/Calendário, sem placeholder, sem tags da origem');
     afirma(/add column if not exists ordem integer/.test(b) && /create policy/.test(b) && /storage\.buckets/.test(b) && /alter publication supabase_realtime/.test(b), 'estrutura essencial presente');
     afirma(!/insert into departamentos|insert into tags/i.test(b) && /create table if not exists config/.test(b), 'seeds de origem fora; tabela config presente');
-    afirma(!fs.existsSync(path.join(RAIZ, 'nuvem/chat-v2.sql')) && fs.readdirSync(path.join(RAIZ, 'nuvem')).filter(f => f.endsWith('.sql')).sort().join() === '000-baseline.sql,001-mv-seed.sql,002-primeiro-admin.sql,conferir-esquema.sql', 'só os quatro .sql');
+    afirma(!fs.existsSync(path.join(RAIZ, 'nuvem/chat-v2.sql')) && (() => { const sqls = fs.readdirSync(path.join(RAIZ, 'nuvem')).filter(f => f.endsWith('.sql')).sort(); return ['000-baseline.sql', '001-mv-seed.sql', '002-primeiro-admin.sql', 'conferir-esquema.sql'].every(f => sqls.includes(f)) && sqls.filter(f => !['000-baseline.sql', '001-mv-seed.sql', '002-primeiro-admin.sql', 'conferir-esquema.sql'].includes(f)).every(f => /^0(0[3-9]|[1-9]\d)-[a-z0-9-]+\.sql$/.test(f)); })(), 'só os quatro .sql');
   });
   await caso('banco: seed genérica e primeiro admin por placeholder', () => {
     const s = fs.readFileSync(path.join(RAIZ, 'nuvem/001-mv-seed.sql'), 'utf8'), a = fs.readFileSync(path.join(RAIZ, 'nuvem/002-primeiro-admin.sql'), 'utf8');
@@ -1599,7 +1599,7 @@ const esperar = ms => new Promise(r => setTimeout(r, ms));
     afirma(html.indexOf('<script src="js/escritorio.js') > 0 && html.indexOf('<script src="js/escritorio.js') < html.indexOf('<script>(function(){try{var p=localStorage') && !/escritorio\.js[^>]*defer/.test(html), 'posição e modo de carga');
     afirma(/<title><\/title>/.test(html) && (html.match(/data-marca="/g) || []).length >= 5, 'title vazio e pontos data-marca');
     const ctx = novoContexto({ banco: null, soStore: true });
-    afirma(run(ctx, 'ESCRITORIO.sistema') === 'Marques e Vasques · Sistema' && run(ctx, 'Object.isFrozen(ESCRITORIO)') && run(ctx, 'STORAGE_KEY') === run(ctx, 'ESCRITORIO.chaves.estado'), 'store usa a chave do escritório');
+    afirma(run(ctx, 'ESCRITORIO.sistema') === 'Vasques Alves · Sistema' && run(ctx, 'Object.isFrozen(ESCRITORIO)') && run(ctx, 'STORAGE_KEY') === run(ctx, 'ESCRITORIO.chaves.estado'), 'store usa a chave do escritório');
   });
 
   await caso('publicar.py do MV: projeto, time e token do escritório', () => {

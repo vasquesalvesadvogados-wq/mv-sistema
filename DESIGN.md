@@ -1,4 +1,4 @@
-# Padrão visual — Marques e Vasques · Sistema
+# Padrão visual — Vasques Alves · Sistema
 
 Paleta grafite, aço, âmbar e off-white; DM Sans e DM Mono. Feito para ficar horas na tela sem cansar.
 
