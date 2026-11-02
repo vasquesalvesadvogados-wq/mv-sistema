@@ -46,6 +46,9 @@ Ordem de subida: Supabase → GitHub → Vercel → primeiro admin → Railway �
 9. **Storage.** Storage → "Settings" (ou Project Settings → Storage): "Upload file size limit" =
    500 MB → Save. Os buckets `midias` e `midias-grandes` já vêm do baseline.
 10. **Max rows.** Project Settings → API → "Max rows": deve estar em 1000 (é o padrão).
+    **Plano Free:** o projeto é pausado depois de 7 dias sem uso. Sintoma: o site não entra e o
+    endereço `<ref>.supabase.co` deixa de existir. Para voltar: abrir o projeto no painel → botão
+    "Restore project" → esperar alguns minutos. O motor reconecta sozinho. No Pro não pausa.
 11. **Primeiro admin** (pode ser agora; o login só funciona depois do front publicado):
     Authentication → Users → "Add user" → "Create new user": e-mail do sócio, senha provisória,
     marcar "Auto Confirm User" → "Create user". Avise o e-mail ao Claude: ele aplica o
@@ -97,11 +100,15 @@ Ordem de subida: Supabase → GitHub → Vercel → primeiro admin → Railway �
 5. **Saúde e reinício.** Serviço → Settings → Deploy: "Healthcheck Path" = `/`; "Restart Policy" =
    Always; Replicas = 1 (não aumente nunca: duas réplicas derrubam o WhatsApp uma da outra).
    Settings → Networking → "Generate Domain" é opcional (só para ver o status em `GET /`).
-6. **Token de projeto.** Settings do projeto → "Tokens" → "Create token": nome `deploy mv-motor`,
+6. **Aplicar as mudanças.** O painel do Railway guarda tudo o que você cria ou altera como "mudança
+   pendente" e mostra um aviso no topo com o botão **"Deploy"** (ou "Apply changes"). Enquanto ele não
+   for clicado, o serviço não existe de fato e o envio do código falha com erro 404. Clique nele depois
+   de criar o serviço e preencher as variáveis (o Claude também consegue aplicar pela API).
+7. **Token de projeto.** Settings do projeto → "Tokens" → "Create token": nome `deploy mv-motor`,
    Environment `production` → copie → `~/.mv-railway-token`.
-7. O Claude roda `nuvem/publicar-motor.sh` (faz `railway up` no serviço `mv-motor`). O log mostra
+8. O Claude roda `nuvem/publicar-motor.sh` (faz `railway up` no serviço `mv-motor`). O log mostra
    "aguardando configuração" até as variáveis existirem e depois "aguardando QR".
-8. **Parear o WhatsApp.** No sistema, logado como admin: Configurações → "Motor WhatsApp" → o QR
+9. **Parear o WhatsApp.** No sistema, logado como admin: Configurações → "Motor WhatsApp" → o QR
    aparece. No celular com o chip do escritório: WhatsApp → Configurações → "Aparelhos conectados"
    → "Conectar aparelho" → escanear. O status vira "conectado". Teste: mande uma mensagem de outro
    número e veja chegar no Chat; responda pelo Chat e veja chegar no celular.
