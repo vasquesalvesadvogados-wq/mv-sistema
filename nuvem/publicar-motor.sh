@@ -9,6 +9,8 @@ if [ ! -f "$TOKEN_ARQ" ]; then
   exit 1
 fi
 
-cd "$(dirname "$0")/../motor"
-RAILWAY_TOKEN="$(cat "$TOKEN_ARQ")" railway up --service mv-motor --detach
+# a partir da raiz do repositório, empacota SÓ a pasta motor/ (sem --path-as-root o CLI
+# empacotaria o projeto inteiro); node_modules fica de fora pelo .gitignore
+cd "$(dirname "$0")/.."
+RAILWAY_TOKEN="$(cat "$TOKEN_ARQ")" railway up motor --path-as-root --service mv-motor --detach
 echo "Lembrete: 1 réplica só; conferir o healthcheck em / no painel."
