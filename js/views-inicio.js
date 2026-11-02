@@ -31,7 +31,7 @@ async function hubResumoEquipe() {
 }
 
 UI.registrar('inicio', () => {
-  const nome = primeiroNome(state.settings.nomeAtendente) || 'time ' + ESCRITORIO.curto;
+  const nome = primeiroNome(state.settings.nomeAtendente) || 'time ' + ESCRITORIO.assinatura;
   const h = new Date().getHours();
   const sauda = h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
   const dataExt = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });

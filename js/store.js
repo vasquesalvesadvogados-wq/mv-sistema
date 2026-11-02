@@ -315,7 +315,7 @@ function esc(s) {
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
-const COR_PADRAO_DADO = '#758C7F'; /* cor-dado — salvia-500 (sálvia da marca): cor padrão de departamento/tag gravada no banco; única cor avulsa fora das listas */
+const COR_PADRAO_DADO = '#556B5E'; /* cor-dado — salvia-600 (sálvia escura da marca, 5,75:1 com texto branco): cor padrão de departamento/tag gravada no banco; única cor avulsa fora das listas */
 /* cor gravada no banco (tag, departamento) que vai para dentro de style="".
    Qualquer usuário consegue gravar essas colunas pela API: sem esta trava, um
    valor como `red;" onmouseover="...` virava código na tela de todo o time. */

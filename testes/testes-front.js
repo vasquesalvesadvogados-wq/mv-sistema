@@ -369,7 +369,7 @@ const esperar = ms => new Promise(r => setTimeout(r, ms));
   await caso('cor segura e escape', () => {
     const ctx = novoContexto({ banco: null, sessao: false });
     afirma(run(ctx, "corSegura('#5e8ab4')") === '#5e8ab4', 'hex válido passa');
-    afirma(run(ctx, "corSegura('red;\" onmouseover=\"alert(1)')") === '#758C7F' && run(ctx, 'COR_PADRAO_DADO') === '#758C7F', 'injeção vira a cor padrão (COR_PADRAO_DADO, sálvia da marca)');
+    afirma(run(ctx, "corSegura('red;\" onmouseover=\"alert(1)')") === '#556B5E' && run(ctx, 'COR_PADRAO_DADO') === '#556B5E', 'injeção vira a cor padrão (COR_PADRAO_DADO, sálvia escura da marca)');
     afirma(run(ctx, "esc('<img src=x onerror=alert(1)>')").indexOf('<') === -1, 'esc remove <');
   });
 

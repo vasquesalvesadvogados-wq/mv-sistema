@@ -1568,7 +1568,7 @@ const Cloud = (() => {
         await carregarTudo();
         esconderGate();
         UI.navegar();
-        UI.toast('Bem-vindo(a), ' + (primeiroNome(meuPerfil.nome) || 'time ' + ESCRITORIO.curto) + '!');
+        UI.toast('Bem-vindo(a), ' + (primeiroNome(meuPerfil.nome) || 'time ' + ESCRITORIO.assinatura) + '!');
         ofertarImportLocal();
       } catch (e) {
         console.error(ESCRITORIO.log + ' Falha na fase "' + fase + '":', e);
